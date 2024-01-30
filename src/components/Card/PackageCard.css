@@ -1,0 +1,21 @@
+.package-card__item {
+    margin: 0px;
+}
+.package-card__item img {
+    height: 150px;
+}
+.package-card__item ion-card-header {
+    padding: 10px;
+    display: flex;
+    flex-direction: column-reverse;
+}
+.package-card__item ion-card-title {
+    color: #0f5ced;
+    font-weight: 500;
+    padding-top: 20px;
+    font-size: 16px;
+}
+ion-card-subtitle {
+    font-weight: 500;
+    text-transform: capitalize;
+}

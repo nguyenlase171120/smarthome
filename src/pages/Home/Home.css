@@ -1,0 +1,10 @@
+.home-wrapper ion-searchbar {
+    padding-inline: 0px;
+}
+.home-wrapper ion-searchbar input {
+    border-radius: 0px !important;
+}
+.home-wrapper {
+    margin-bottom: 56px;
+    padding-bottom: 20px;
+}

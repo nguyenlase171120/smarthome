@@ -1,0 +1,18 @@
+.header-wrapper {
+    box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.14), 0 1px 1px 0 rgba(0, 0, 0, 0.12) !important
+}
+.header-wrapper .custome-toolbar {
+    --background: #0f5ced;
+    --color: white;
+}
+.header-wrapper .title-page {
+    text-align: left;
+    font-size: 18px;
+    font-weight: 700;
+}
+.header-wrapper .icon-notify {
+    color: white;
+}
+ion-buttons {
+    padding-right: 5px;
+}

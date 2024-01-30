@@ -1,7 +1,8 @@
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
+import { IonApp, IonContent, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import Home from './pages/Home';
+import Home from './pages/Home/Home';
+import React from 'react';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -21,20 +22,31 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-
+import './global.css';
+import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
+import { EPath } from './enums/path';
+import PackageDetail from './pages/PackageDetail/PackageDetail';
 setupIonicReact();
 
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/home">
-          <Home />
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/home" />
-        </Route>
-      </IonRouterOutlet>
+      <Header />
+      <IonContent class='content-wrapper'>
+        <IonRouterOutlet>
+          <Route exact path={EPath.Home}>
+            <Home />
+          </Route>
+          <Route exact path="/">
+            <Redirect to={EPath.Home} />
+          </Route>
+          <Route exact path={`${EPath.Package}/:id`}>
+            <PackageDetail />
+          </Route>
+        </IonRouterOutlet>
+      </IonContent>
+      <Footer />
     </IonReactRouter>
   </IonApp>
 );
