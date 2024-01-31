@@ -14,7 +14,7 @@ const Footer: React.FC = () => {
             <IonToolbar class='custome-toolbar'>
                 <div className='container-main'>
                     <div className='footer-group__button'>
-                        <button className='active' onClick={() => history.push(EPath.Home)}>
+                        <button className='active' onClick={() => history.replace(EPath.Home)}>
                             {/* <HomeOutlined />  */}
                             <HomeFilled />
                             <div>Trang chủ</div>

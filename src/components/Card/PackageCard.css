@@ -19,3 +19,13 @@ ion-card-subtitle {
     font-weight: 500;
     text-transform: capitalize;
 }
+.package-card__list {
+    display: flex;
+    overflow: auto;
+}
+.package-card__item {
+    min-width: 190px;
+    margin-right: 10px;
+    box-shadow: none;
+    border: 1px solid #00000012
+}

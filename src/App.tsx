@@ -2,6 +2,10 @@ import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonContent, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home/Home';
+import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
+import { EPath } from './enums/path';
+import PackageDetail from './pages/PackageDetail/PackageDetail';
 import React from 'react';
 
 /* Core CSS required for Ionic components to work properly */
@@ -23,10 +27,7 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import './global.css';
-import Header from './components/Header/Header';
-import Footer from './components/Footer/Footer';
-import { EPath } from './enums/path';
-import PackageDetail from './pages/PackageDetail/PackageDetail';
+
 setupIonicReact();
 
 const App: React.FC = () => (
@@ -41,7 +42,7 @@ const App: React.FC = () => (
           <Route exact path="/">
             <Redirect to={EPath.Home} />
           </Route>
-          <Route exact path={`${EPath.Package}/:id`}>
+          <Route exact path={`${EPath.Package}`}>
             <PackageDetail />
           </Route>
         </IonRouterOutlet>

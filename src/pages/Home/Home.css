@@ -4,7 +4,7 @@
 .home-wrapper ion-searchbar input {
     border-radius: 0px !important;
 }
-.home-wrapper {
+.home-wrapper, .content-wrapper {
     margin-bottom: 56px;
     padding-bottom: 20px;
 }

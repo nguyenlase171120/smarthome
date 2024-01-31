@@ -16,3 +16,10 @@
 ion-buttons {
     padding-right: 5px;
 }
+.btn-back {
+    --color: white;
+}
+.icon-back {
+    color: white;
+    margin-right: 5px;
+}
