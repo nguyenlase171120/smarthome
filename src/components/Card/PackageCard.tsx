@@ -1,4 +1,4 @@
-import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
+import { IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 import React from 'react';
 import './PackageCard.css'
 import useConvert from '../../hooks/useConvert';
