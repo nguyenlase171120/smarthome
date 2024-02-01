@@ -1,4 +1,4 @@
-import { CommentOutlined, FileTextOutlined, HomeFilled, PhoneOutlined } from '@ant-design/icons';
+import { CommentOutlined, FileTextOutlined, HomeFilled, PhoneOutlined, UserOutlined } from '@ant-design/icons';
 import { IonFooter, IonToolbar } from '@ionic/react';
 import React from 'react';
 import './Footer.css'
@@ -28,8 +28,8 @@ const Footer: React.FC = () => {
                             <div>Hỗ trợ</div>
                         </button>
                         <button>
-                            <CommentOutlined /> 
-                            <div>Chat</div>
+                            <UserOutlined /> 
+                            <div>Tài khoản</div>
                         </button>
                     </div>
                 </div>

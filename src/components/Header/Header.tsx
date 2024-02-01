@@ -1,4 +1,4 @@
-import { ArrowRightOutlined, BellOutlined, CaretLeftFilled, CaretRightFilled, CaretRightOutlined } from '@ant-design/icons';
+import { ArrowRightOutlined, BellOutlined, CaretLeftFilled, CaretRightFilled, CaretRightOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { IonBackButton, IonButton, IonButtons, IonHeader, IonTitle, IonToolbar } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import './Header.css'
@@ -41,7 +41,10 @@ const Header: React.FC = () => {
             
             <IonButtons slot='end'>
                 <IonButton>
-                    <BellOutlined className='icon-notify' />
+                    <ShoppingCartOutlined className='icon-custome' />
+                </IonButton>
+                <IonButton>
+                    <BellOutlined className='icon-custome' />
                 </IonButton>
             </IonButtons>
         </IonToolbar>

@@ -9,25 +9,19 @@ const PackageDetail: React.FC = () => {
   const lstData = [{
     key: 1,
     image: 'https://ionicframework.com/docs/img/demos/card-media.png',
-    name: 'FPT Camera 1',
-    price: 20000
+    name: 'Camera 1',
+    desc: 'Mô tả ngắn mô tả ngắn mô tả ngắn Mô tả ngắn mô tả ngắn mô tả ngắn'
   }, {
     key: 2,
     image: 'https://ionicframework.com/docs/img/demos/card-media.png',
-    name: 'FPT Camera 2',
-    price: 20000
+    name: 'Camera 2',
+    desc: 'Mô tả ngắn mô tả ngắn mô tả ngắn'
   }, 
   {
     key: 3,
     image: 'https://ionicframework.com/docs/img/demos/card-media.png',
-    name: 'FPT Camera 3',
-    price: 20000
-  },
-  {
-    key: 4,
-    image: 'https://ionicframework.com/docs/img/demos/card-media.png',
-    name: 'FPT Tivi 1',
-    price: 20000
+    name: 'Camera 3',
+    desc: 'Mô tả ngắn mô tả ngắn mô tả ngắn'
   }]
   
   const lstComment = [{
@@ -48,11 +42,11 @@ const PackageDetail: React.FC = () => {
   }]
     
     const {id} = useParams<any>()
-    console.log('id', id)
+
     const history = useHistory()
     return (
         <div className='container-main content-wrapper detail-package-wrapper'>
-          <PackageCard lstData={lstData} isShowTitle={false} />
+          <PackageCard lstData={lstData} isShowBtnMore={true} />
           <h5>Nhận Xét</h5>
           {lstComment.map((comment: any) => (
             <CommentCard key={comment.key} item={comment} />

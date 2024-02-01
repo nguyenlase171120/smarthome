@@ -9,9 +9,11 @@
     text-align: left;
     font-size: 18px;
     font-weight: 700;
+    text-transform: capitalize;
 }
-.header-wrapper .icon-notify {
+.header-wrapper .icon-custome {
     color: white;
+    font-size: 20px;
 }
 ion-buttons {
     padding-right: 5px;
