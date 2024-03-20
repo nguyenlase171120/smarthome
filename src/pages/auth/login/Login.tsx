@@ -29,7 +29,8 @@ const Login: React.FC = () => {
     });
 
   const onFinish = (values: LoginAccountTypes): void => {
-    mutateLoginAccount(values);
+    // mutateLoginAccount(values);
+    history.replace(END_POINTS.CUSTOMER_ROLE.HOME);
   };
 
   return (
@@ -52,7 +53,7 @@ const Login: React.FC = () => {
           </Row>
 
           <Form.Item
-            label="Phone Number"
+            label="Phone Number "
             name="phoneNumber"
             rules={[
               { required: true, message: "Phone number is required" },
@@ -111,7 +112,6 @@ const Login: React.FC = () => {
           </Form.Item>
         </Form>
       </IonContent>
-
       <IonFooter className="footer">
         <Typography> Don't have an account ?</Typography>
         <Link to={"/register"}>Sign Up</Link>

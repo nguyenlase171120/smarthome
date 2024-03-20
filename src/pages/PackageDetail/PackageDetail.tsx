@@ -50,9 +50,6 @@ const PackageDetail: React.FC = () => {
     },
   ];
 
-  const { id } = useParams<any>();
-
-  const history = useHistory();
   return (
     <div className="container-main content-wrapper detail-package-wrapper">
       <PackageCard lstData={lstData} isShowBtnMore={true} />

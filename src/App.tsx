@@ -11,7 +11,6 @@ import Login from "./pages/auth/login/Login";
 import Register from "./pages/auth/register/Register";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
-import { EPath } from "./enums/path";
 import PackageDetail from "./pages/PackageDetail/PackageDetail";
 import React from "react";
 
@@ -42,24 +41,22 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <Header />
-      <IonContent class="content-wrapper">
-        <IonRouterOutlet>
-          <Route exact path={END_POINTS.CUSTOMER_ROLE.HOME}>
-            <Home />
-          </Route>
-          <Route exact path={`${EPath.Package}`}>
-            <PackageDetail />
-          </Route>
-          <Route exact path="/login">
-            <Login />
-          </Route>
-          <Route exact path="/register">
-            <Register />
-          </Route>
-          <Route exact path="/">
-            <Redirect to="/login" />
-          </Route>
-        </IonRouterOutlet>
+      <IonContent class="ion-padding">
+        <Route exact path={END_POINTS.CUSTOMER_ROLE.HOME}>
+          <Home />
+        </Route>
+        <Route exact path={END_POINTS.CUSTOMER_ROLE.PACKAGE}>
+          <PackageDetail />
+        </Route>
+        <Route exact path={END_POINTS.AUTHENTICATION.LOGIN}>
+          <Login />
+        </Route>
+        <Route exact path={END_POINTS.AUTHENTICATION.SIGN_UP}>
+          <Register />
+        </Route>
+        <Route exact path="/">
+          <Redirect to={END_POINTS.AUTHENTICATION.LOGIN} />
+        </Route>
       </IonContent>
       <Footer />
     </IonReactRouter>

@@ -18,14 +18,11 @@
 
 .home-wrapper,
 .content-wrapper {
-  margin-bottom: 56px;
-  padding-bottom: 20px;
   background: #f5f6fa;
 }
 .home-wrapper .category__list {
   display: flex;
   overflow: auto;
-  margin-top: 10px;
 }
 .mt-25 {
   margin-top: 25px;

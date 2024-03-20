@@ -4,25 +4,14 @@ import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import Heading from "../../../components/heading/Heading";
 import "../login/Login.css";
+import { END_POINTS } from "../../../utils/constant";
 
 const Register: React.FC = () => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
-  const onFinish = async (value: any) => {
-    try {
-      setLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      console.log("value", value);
-      message.success("You have successfully registered");
-      form.resetFields();
-      history.push("/login");
-    } catch (error) {
-      console.log("error", error);
-      message.error("You failed to register");
-    }
-  };
+  const onFinish = async (value: any) => {};
 
   return (
     <IonPage className="layout-auth">
@@ -123,7 +112,7 @@ const Register: React.FC = () => {
 
       <IonFooter className="footer">
         <Typography> Don't have an account ?</Typography>
-        <Link to={"/login"}>Sign In</Link>
+        <Link to={END_POINTS.AUTHENTICATION.LOGIN}>Sign In</Link>
       </IonFooter>
     </IonPage>
   );
