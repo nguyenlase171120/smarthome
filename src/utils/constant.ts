@@ -8,3 +8,11 @@ export const END_POINTS = {
     PACKAGE: "/customer-role/packages",
   },
 };
+
+export const END_POINTS_API = {
+  SIGN_IN: "/api/auth",
+
+  CUSTOMER_ROLE: {
+    SIGN_UP: "/api/customers",
+  },
+};

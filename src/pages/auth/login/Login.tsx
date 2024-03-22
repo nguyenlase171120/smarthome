@@ -1,9 +1,7 @@
-import { IonContent, IonFooter, IonModal, IonPage } from "@ionic/react";
+import { IonContent, IonFooter, IonPage } from "@ionic/react";
 import { Button, Form, Input, Row, Typography, message } from "antd";
-import { useRef } from "react";
 import { Link, useHistory } from "react-router-dom";
 import Heading from "../../../components/heading/Heading";
-import ForgotPassword from "../forgot-password/ForgotPassword";
 import "./Login.css";
 import { LoginAccountTypes } from "../../../api/Authentication/type";
 import { useMutation } from "@tanstack/react-query";
@@ -12,15 +10,13 @@ import { onHandleErrorAPIResponse } from "../../../utils/helper";
 import { END_POINTS } from "../../../utils/constant";
 
 const Login: React.FC = () => {
-  const forgotPasswordModal = useRef<HTMLIonModalElement>(null);
-
   const history = useHistory();
 
   const { mutate: mutateLoginAccount, isPending: isLoadingLoginAccount } =
     useMutation({
       mutationFn: AuthenticationAPI.LoginAccount,
       onSuccess: () => {
-        message.success("Login Account is successfully");
+        message.success("Đăng nhập tài khoản thành công");
         history.replace(END_POINTS.CUSTOMER_ROLE.HOME);
       },
       onError: (errorResponse) => {
@@ -29,8 +25,7 @@ const Login: React.FC = () => {
     });
 
   const onFinish = (values: LoginAccountTypes): void => {
-    // mutateLoginAccount(values);
-    history.replace(END_POINTS.CUSTOMER_ROLE.HOME);
+    mutateLoginAccount(values);
   };
 
   return (
@@ -82,22 +77,6 @@ const Login: React.FC = () => {
             >
               <Input.Password autoComplete="password" placeholder="123456aA!" />
             </Form.Item>
-            <Typography
-              style={{ marginBottom: "20px", textAlign: "right" }}
-              id="open-modal"
-            >
-              Forgot Password?
-            </Typography>
-            <IonModal
-              ref={forgotPasswordModal}
-              trigger="open-modal"
-              initialBreakpoint={0.75}
-              breakpoints={[0, 0.75]}
-            >
-              <IonContent className="ion-padding">
-                <ForgotPassword />
-              </IonContent>
-            </IonModal>
           </div>
 
           <Form.Item>
@@ -114,7 +93,7 @@ const Login: React.FC = () => {
       </IonContent>
       <IonFooter className="footer">
         <Typography> Don't have an account ?</Typography>
-        <Link to={"/register"}>Sign Up</Link>
+        <Link to={END_POINTS.AUTHENTICATION.SIGN_UP}>Sign Up</Link>
       </IonFooter>
     </IonPage>
   );

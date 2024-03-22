@@ -5,17 +5,33 @@ import { Link, useHistory } from "react-router-dom";
 import Heading from "../../../components/heading/Heading";
 import "../login/Login.css";
 import { END_POINTS } from "../../../utils/constant";
+import { useMutation } from "@tanstack/react-query";
+import CustomerAPI from "../../../api/Customer";
+import { onHandleErrorAPIResponse } from "../../../utils/helper";
+import { SignUpCustomerAccountTypes } from "../../../api/Customer/type";
 
 const Register: React.FC = () => {
   const history = useHistory();
-  const [loading, setLoading] = useState(false);
+  const { mutate, isPending: isLoadingSignUp } = useMutation({
+    mutationFn: CustomerAPI.SignUpAccount,
+    onSuccess: () => {
+      message.success("Tạo tài khoản mới thành công"),
+        history.push(END_POINTS.AUTHENTICATION.LOGIN);
+    },
+    onError: (errorResponse) => {
+      onHandleErrorAPIResponse(errorResponse);
+    },
+  });
+
   const [form] = Form.useForm();
 
-  const onFinish = async (value: any) => {};
+  const onFinish = (values: SignUpCustomerAccountTypes) => {
+    mutate(values);
+  };
 
   return (
     <IonPage className="layout-auth">
-      <IonContent className="main" scrollY={false}>
+      <IonContent className="main" scrollY={true}>
         <div className="header">
           <Heading
             title="Create Account"
@@ -30,25 +46,19 @@ const Register: React.FC = () => {
             <img src="/img/smarthome.png" alt="logo" />
           </div>
           <Form.Item
-            name="username"
-            rules={[
-              { required: true, message: "Please input your fullname!" },
-              {
-                min: 6,
-                message: "You must enter at least 6 characters",
-              },
-            ]}
+            name="fullName"
+            rules={[{ required: true, message: "Full Name is required!" }]}
           >
             <Input placeholder="Full Name" style={{ height: "40px" }} />
           </Form.Item>
           <Form.Item
-            name="mobile"
+            name="phoneNumber"
             rules={[
-              { required: true, message: "Please input your mobile!" },
+              { required: true, message: "Phone number is required" },
               {
                 pattern: /^0\d{9}$/,
                 message:
-                  "Please enter a valid 10-digit mobile number starting with 0!",
+                  "Please enter a valid 10-digit phone number starting with 0!",
               },
             ]}
           >
@@ -64,8 +74,21 @@ const Register: React.FC = () => {
             <Input placeholder="Email Address" style={{ height: "40px" }} />
           </Form.Item>
           <Form.Item
+            name="address"
+            rules={[{ required: true, message: "Address is required!" }]}
+          >
+            <Input placeholder="Address" style={{ height: "40px" }} />
+          </Form.Item>
+          <Form.Item
             name="password"
-            rules={[{ required: true, message: "Please input your password!" }]}
+            rules={[
+              { required: true, message: "Password is required" },
+              {
+                pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
+                message:
+                  "Password must at least 8 characters, one letter and one number",
+              },
+            ]}
           >
             <Input.Password
               placeholder="Password"
@@ -74,11 +97,9 @@ const Register: React.FC = () => {
             />
           </Form.Item>
           <Form.Item
-            name="confim-password"
+            name="confirm-password"
             dependencies={["password"]}
             rules={[
-              { required: true, message: "Please input your confim password!" },
-
               ({ getFieldValue }) => ({
                 validator(_, value) {
                   if (!value || getFieldValue("password") === value) {
@@ -102,9 +123,9 @@ const Register: React.FC = () => {
               type="primary"
               style={{ width: "100%", height: "40px" }}
               htmlType="submit"
-              loading={loading}
+              loading={isLoadingSignUp}
             >
-              {!loading ? "Sign Up" : ""}
+              Sign Up
             </Button>
           </Form.Item>
         </Form>
