@@ -13,17 +13,13 @@ import {
 import React, { useEffect, useState } from "react";
 import "./Header.css";
 import { useHistory } from "react-router";
-import { END_POINTS } from "../../utils/constant";
+import { END_POINTS, ROUTES_NON_FOOTER_HEADER } from "../../utils/constant";
 
 const Header: React.FC = () => {
   const history = useHistory();
   const [titleBack, setTitleBack] = useState("");
   const [isShowBtnBack, setIsShowBtnBack] = useState(false);
   const [isShowEleCommon, setIsShowEleCommon] = useState(false);
-  const arrPath = [
-    END_POINTS.CUSTOMER_ROLE.HOME,
-    END_POINTS.CUSTOMER_ROLE.PACKAGE,
-  ];
 
   useEffect(() => {
     const unListen = history.listen(async () => {
@@ -37,7 +33,9 @@ const Header: React.FC = () => {
 
       title && setTitleBack(title);
 
-      if (arrPath.findIndex((x) => pathName.indexOf(x) > -1) > -1)
+      if (
+        ROUTES_NON_FOOTER_HEADER.findIndex((x) => pathName.indexOf(x) > -1) > -1
+      )
         setIsShowEleCommon(true);
       else setIsShowEleCommon(false);
     });

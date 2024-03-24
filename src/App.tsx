@@ -34,6 +34,7 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 import "./global.css";
 import { END_POINTS } from "./utils/constant";
+import CustomerContract from "./pages/Contract";
 
 setupIonicReact();
 
@@ -42,10 +43,15 @@ const App: React.FC = () => (
     <IonReactRouter>
       <Header />
       <IonContent class="ion-padding">
+        <Route exact path={END_POINTS.CUSTOMER_ROLE.CONTRACT}>
+          <CustomerContract />
+        </Route>
+
         <Route exact path={END_POINTS.CUSTOMER_ROLE.HOME}>
           <Home />
         </Route>
-        <Route exact path={END_POINTS.CUSTOMER_ROLE.PACKAGE}>
+
+        <Route exact path={END_POINTS.CUSTOMER_ROLE.PACKAGE_DETAIL}>
           <PackageDetail />
         </Route>
         <Route exact path={END_POINTS.AUTHENTICATION.LOGIN}>

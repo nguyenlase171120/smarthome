@@ -16,13 +16,14 @@
   box-shadow: none !important;
 }
 
-.home-wrapper,
+/* .home-wrapper,
 .content-wrapper {
   background: #f5f6fa;
-}
+} */
 .home-wrapper .category__list {
   display: flex;
   overflow: auto;
+  margin-bottom: 1rem;
 }
 .mt-25 {
   margin-top: 25px;

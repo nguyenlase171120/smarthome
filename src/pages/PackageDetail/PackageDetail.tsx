@@ -1,30 +1,30 @@
-import React from "react";
-import { useHistory, useParams } from "react-router";
-import PackageCard from "../../components/Card/PackageCard";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
 import "./PackageDetail.css";
 import CommentCard from "../../components/Card/CommentCard";
+import { useMutation } from "@tanstack/react-query";
+import DevicePackagesAPI from "../../api/DevicePackage";
+import { onHandleErrorAPIResponse } from "../../utils/helper";
+import { Skeleton } from "antd";
+import ComboCard from "../../components/Card/PackageCard";
+import { DevicePackageDetailTypes } from "../../api/DevicePackage/type";
 
 const PackageDetail: React.FC = () => {
-  const lstData = [
-    {
-      key: 1,
-      image: "https://ionicframework.com/docs/img/demos/card-media.png",
-      name: "Camera 1",
-      desc: "Mô tả ngắn mô tả ngắn mô tả ngắn Mô tả ngắn mô tả ngắn mô tả ngắn",
+  const { id }: any = useParams();
+  const [packageData, setPackage] = useState<DevicePackageDetailTypes>();
+
+  const {
+    isPending: isDeviceByPackageIdLoading,
+    mutate: getDevicesByPackageId,
+  } = useMutation({
+    mutationFn: DevicePackagesAPI.getDeviceByPackageId,
+    onError: (error) => {
+      onHandleErrorAPIResponse(error);
     },
-    {
-      key: 2,
-      image: "https://ionicframework.com/docs/img/demos/card-media.png",
-      name: "Camera 2",
-      desc: "Mô tả ngắn mô tả ngắn mô tả ngắn",
+    onSuccess: (res: any) => {
+      setPackage(res);
     },
-    {
-      key: 3,
-      image: "https://ionicframework.com/docs/img/demos/card-media.png",
-      name: "Camera 3",
-      desc: "Mô tả ngắn mô tả ngắn mô tả ngắn",
-    },
-  ];
+  });
 
   const lstComment = [
     {
@@ -50,9 +50,22 @@ const PackageDetail: React.FC = () => {
     },
   ];
 
+  useEffect(() => {
+    if (id) {
+      getDevicesByPackageId(id);
+    }
+  }, [id]);
+
+  if (isDeviceByPackageIdLoading) {
+    return <Skeleton active />;
+  }
+
   return (
     <div className="container-main content-wrapper detail-package-wrapper">
-      <PackageCard lstData={lstData} isShowBtnMore={true} />
+      {packageData && (
+        <ComboCard smartDevices={packageData!.smartDevicePackages} />
+      )}
+
       <h5>Nhận Xét</h5>
       {lstComment.map((comment: any) => (
         <CommentCard key={comment.key} item={comment} />

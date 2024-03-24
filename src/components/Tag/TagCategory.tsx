@@ -1,26 +1,21 @@
 import CheckableTag from "antd/es/tag/CheckableTag";
 import React from "react";
-import './TagCategory.css'
+import "./TagCategory.css";
+import { DevicePackageTypes } from "../../api/DevicePackage/type";
 
 interface Props {
-    item: any,
-    selectedItem: any,
-    className?: string, 
-    handleChange: (item: any) => void
+  item: DevicePackageTypes;
 }
 
-const TagCategory: React.FC<Props> = ({item, selectedItem, className, handleChange}) => {
-    const isChecked = selectedItem.key === item.key
-
-    return <>
-        <CheckableTag key={item.key} checked={isChecked}
-        className={`category__tag ${className}`}
-        onChange={() => handleChange(item)}
-        >
-            <img src={item.image} />
-            {item.name}
-        </CheckableTag>
+const TagCategory: React.FC<Props> = ({ item }) => {
+  return (
+    <>
+      <CheckableTag key={item.id} className={`category__tag `} checked>
+        <img src={item.images[0].url} />
+        {item.name}
+      </CheckableTag>
     </>
-}
+  );
+};
 
-export default TagCategory
+export default TagCategory;

@@ -9,65 +9,83 @@ import "./PackageCard.css";
 import useConvert from "../../hooks/useConvert";
 import { useHistory } from "react-router";
 import { END_POINTS } from "../../utils/constant";
+import {
+  DevicePackageDetailTypes,
+  DevicePackageTypes,
+  SmartDevicePackageItemTypes,
+} from "../../api/DevicePackage/type";
+import { Image } from "antd";
+import { SmartDeviceItemTypes } from "../../types";
 
 interface Props {
-  lstData: any[];
-  title?: string;
+  lstData?: DevicePackageTypes[];
   className?: string;
   isShowBtnMore?: boolean;
+
+  smartDevices?: SmartDevicePackageItemTypes[];
 }
 
 const ComboCard: React.FC<Props> = ({
   lstData,
-  title,
-  className,
   isShowBtnMore = false,
+  smartDevices = [],
 }) => {
   const convert = useConvert();
   const history = useHistory();
 
-  const goToDetailPackage = async (item: any) => {
-    history.replace(END_POINTS.CUSTOMER_ROLE.PACKAGE, { title: item.name });
+  const goToDetailPackage = (item: DevicePackageTypes) => {
+    history.replace(`${END_POINTS.CUSTOMER_ROLE.PACKAGE}/${item.id}`, {
+      title: item.name,
+    });
   };
 
   return (
-    <div className={className}>
-      {title && <h5>{title}</h5>}
-      <div className="package-card__list">
-        {lstData?.map((item: any) => (
-          <IonCard
-            className="package-card__item"
-            key={item.key}
-            onClick={() => title && goToDetailPackage(item)}
-          >
-            <img src={item.image} />
-            <IonCardHeader>
-              {item.price && (
-                <IonCardTitle>{convert.toMoney(item.price)}</IonCardTitle>
+    <div className="package-card__list">
+      {lstData?.map((item) => (
+        <IonCard
+          className="package-card__item"
+          key={item.id}
+          onClick={() => goToDetailPackage(item)}
+        >
+          <Image src={item.images[0].url} alt="device-package-alt" />
+          <IonCardHeader>
+            <IonCardTitle>{convert.toMoney(item.price) || 0}</IonCardTitle>
+            <p className="package-card__desc">
+              {item.name}
+              {isShowBtnMore && (
+                <a
+                  style={{
+                    marginTop: 10,
+                    textAlign: "right",
+                    marginLeft: 10,
+                  }}
+                >
+                  Xem thêm
+                </a>
               )}
-              {item.desc && (
-                <p className="package-card__desc">
-                  {item.desc.length > 35
-                    ? `${item.desc.slice(0, 35)}...`
-                    : item.desc}
-                  {isShowBtnMore && (
-                    <a
-                      style={{
-                        marginTop: 10,
-                        textAlign: "right",
-                        marginLeft: 10,
-                      }}
-                    >
-                      Xem thêm
-                    </a>
-                  )}
-                </p>
-              )}
-              <IonCardSubtitle>{item.name}</IonCardSubtitle>
-            </IonCardHeader>
-          </IonCard>
-        ))}
-      </div>
+            </p>
+            <IonCardSubtitle>
+              {item.description.slice(0, 35) + "..."}
+            </IonCardSubtitle>
+          </IonCardHeader>
+        </IonCard>
+      ))}
+
+      {smartDevices?.length > 0 &&
+        smartDevices?.map((item) => {
+          const device = item.smartDevice;
+          return (
+            <IonCard className="package-card__item" key={device.id}>
+              <Image src={device.image} alt="device-package-alt" />
+              <IonCardHeader>
+                <IonCardTitle>
+                  {convert.toMoney(device.price) || 0}
+                </IonCardTitle>
+                <p className="package-card__desc">{device.name}</p>
+              </IonCardHeader>
+            </IonCard>
+          );
+        })}
     </div>
   );
 };
