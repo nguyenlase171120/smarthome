@@ -22,6 +22,7 @@ export const END_POINTS_API = {
   },
 
   CONTRACTS: "/api/contracts",
+  SURVEY: "/api/survey-requests",
 };
 
 export const ROUTES_NON_FOOTER_HEADER = [

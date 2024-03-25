@@ -1,23 +1,38 @@
 import { IonContent, IonFooter, IonPage } from "@ionic/react";
-import { Button, Form, Input, Row, Typography, message } from "antd";
+import { Button, Form, Input, Row, Skeleton, Typography, message } from "antd";
 import { Link, useHistory } from "react-router-dom";
 import Heading from "../../../components/heading/Heading";
 import "./Login.css";
 import { LoginAccountTypes } from "../../../api/Authentication/type";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import AuthenticationAPI from "../../../api/Authentication";
 import { onHandleErrorAPIResponse } from "../../../utils/helper";
 import { END_POINTS } from "../../../utils/constant";
+import { useDispatch } from "react-redux";
+import { updateUserProfile } from "../../../redux/userProfileSlice";
+import { UserProfileTypes } from "../../../types";
 
 const Login: React.FC = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
+
+  const {
+    isLoading: isLoadingGetUserProfile,
+    data: userProfileResponse,
+    refetch: getUserProfile,
+    isSuccess,
+  } = useQuery({
+    queryKey: ["user-profile"],
+    queryFn: AuthenticationAPI.GetAccountLogin,
+    enabled: false,
+  });
 
   const { mutate: mutateLoginAccount, isPending: isLoadingLoginAccount } =
     useMutation({
       mutationFn: AuthenticationAPI.LoginAccount,
-      onSuccess: () => {
-        message.success("Đăng nhập tài khoản thành công");
-        history.replace(END_POINTS.CUSTOMER_ROLE.HOME);
+      onSuccess: (response: any) => {
+        localStorage.setItem("accessToken", response.accessToken);
+        getUserProfile();
       },
       onError: (errorResponse) => {
         onHandleErrorAPIResponse(errorResponse);
@@ -27,6 +42,15 @@ const Login: React.FC = () => {
   const onFinish = (values: LoginAccountTypes): void => {
     mutateLoginAccount(values);
   };
+
+  if (isLoadingGetUserProfile) {
+    return <Skeleton />;
+  }
+
+  if (userProfileResponse && isSuccess) {
+    dispatch(updateUserProfile(userProfileResponse as any));
+    history.replace(END_POINTS.CUSTOMER_ROLE.HOME);
+  }
 
   return (
     <IonPage className="layout-auth">

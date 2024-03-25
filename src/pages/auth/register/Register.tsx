@@ -1,6 +1,5 @@
 import { IonContent, IonFooter, IonPage } from "@ionic/react";
 import { Button, Form, Input, Typography, message } from "antd";
-import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import Heading from "../../../components/heading/Heading";
 import "../login/Login.css";
@@ -15,7 +14,7 @@ const Register: React.FC = () => {
   const { mutate, isPending: isLoadingSignUp } = useMutation({
     mutationFn: CustomerAPI.SignUpAccount,
     onSuccess: () => {
-      message.success("Tạo tài khoản mới thành công"),
+      message.success("Create a new account is successfully"),
         history.push(END_POINTS.AUTHENTICATION.LOGIN);
     },
     onError: (errorResponse) => {

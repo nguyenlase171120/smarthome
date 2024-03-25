@@ -7,8 +7,14 @@ import DevicePackagesAPI from "../../api/DevicePackage";
 import { onHandleErrorAPIResponse } from "../../utils/helper";
 import { Skeleton } from "antd";
 import { DevicePackageTypes } from "../../api/DevicePackage/type";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const Home: React.FC = () => {
+  const userProfileState = useSelector((selector: RootState) =>
+    console.log(selector)
+  );
+
   const {
     isPending: isDevicePackagesLoading,
     mutate: mutateAllDevicePackages,
@@ -30,7 +36,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="home-wrapper">
-      <h5>Xin chào, Thành Tú!</h5>
+      <h5>Welcome back !</h5>
       <div className="category__list">
         {devicePackages?.data.map((item: DevicePackageTypes) => (
           <TagCategory item={item} />

@@ -73,3 +73,14 @@ export type TellerItemTypes = {
   status: DeviceStatus;
   createAt: string;
 };
+
+export type UserProfileTypes = {
+  id: string;
+  phoneNumber: string;
+  fullName: string;
+  email: string;
+  avatar: null;
+  roleName: string;
+  status: string;
+  createAt: string;
+};
