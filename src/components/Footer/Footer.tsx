@@ -49,9 +49,13 @@ const Footer: React.FC = () => {
                   <FileTextOutlined />
                   <div>Hợp đồng</div>
                 </button>
-                <button>
+                <button
+                  onClick={() =>
+                    history.replace(END_POINTS.CUSTOMER_ROLE.SURVEY)
+                  }
+                >
                   <PhoneOutlined />
-                  <div>Hỗ trợ</div>
+                  <div>Khảo sát</div>
                 </button>
                 <button>
                   <UserOutlined />

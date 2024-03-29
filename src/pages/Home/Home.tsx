@@ -1,19 +1,25 @@
 import "./Home.css";
-import React, { useEffect } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import PackageCard from "../../components/Card/PackageCard";
 import TagCategory from "../../components/Tag/TagCategory";
 import { useMutation } from "@tanstack/react-query";
 import DevicePackagesAPI from "../../api/DevicePackage";
 import { onHandleErrorAPIResponse } from "../../utils/helper";
-import { Skeleton } from "antd";
-import { DevicePackageTypes } from "../../api/DevicePackage/type";
+import { Input, Skeleton } from "antd";
+import {
+  DevicePackageDetailTypes,
+  DevicePackageTypes,
+} from "../../api/DevicePackage/type";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import { debounce } from "lodash";
 
 const Home: React.FC = () => {
   const userProfileState = useSelector((selector: RootState) =>
     console.log(selector)
   );
+
+  const [packages, setPackages] = useState<DevicePackageTypes[]>([]);
 
   const {
     isPending: isDevicePackagesLoading,
@@ -24,11 +30,24 @@ const Home: React.FC = () => {
     onError: (errorResponse) => {
       onHandleErrorAPIResponse(errorResponse);
     },
+    onSuccess: (res) => {
+      setPackages(res.data);
+    },
   });
 
   useEffect(() => {
     mutateAllDevicePackages();
   }, []);
+
+  const onSearchPackageName = (event: ChangeEvent<HTMLInputElement>) => {
+    const keyword = event.target.value.toLowerCase();
+    if (devicePackages?.data) {
+      const result = devicePackages.data.filter((item: DevicePackageTypes) =>
+        item.name.toLowerCase().includes(keyword)
+      );
+      setPackages(result);
+    }
+  };
 
   if (isDevicePackagesLoading) {
     return <Skeleton active />;
@@ -37,16 +56,14 @@ const Home: React.FC = () => {
   return (
     <div className="home-wrapper">
       <h5>Welcome back !</h5>
-      <div className="category__list">
-        {devicePackages?.data.map((item: DevicePackageTypes) => (
-          <TagCategory item={item} />
-        ))}
-      </div>
-      {devicePackages?.data.length > 0 && (
-        <PackageCard
-          lstData={devicePackages?.data}
-          key={devicePackages?.data}
-        />
+      <Input.Search
+        style={{ marginBottom: "1rem" }}
+        placeholder="Search..."
+        onChange={debounce(onSearchPackageName, 500)}
+      />
+
+      {packages.length > 0 && (
+        <PackageCard lstData={packages} key={devicePackages?.data} />
       )}
     </div>
   );

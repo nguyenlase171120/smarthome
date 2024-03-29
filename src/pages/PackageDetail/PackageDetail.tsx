@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import "./PackageDetail.css";
 import CommentCard from "../../components/Card/CommentCard";
@@ -8,10 +8,12 @@ import { onHandleErrorAPIResponse } from "../../utils/helper";
 import { Skeleton } from "antd";
 import ComboCard from "../../components/Card/PackageCard";
 import { DevicePackageDetailTypes } from "../../api/DevicePackage/type";
+import SurveyModal from "./SurveyModal";
 
 const PackageDetail: React.FC = () => {
   const { id }: any = useParams();
   const [packageData, setPackage] = useState<DevicePackageDetailTypes>();
+  const surveyModalRef = useRef<any>();
 
   const {
     isPending: isDeviceByPackageIdLoading,
@@ -62,6 +64,7 @@ const PackageDetail: React.FC = () => {
 
   return (
     <div className="container-main content-wrapper detail-package-wrapper">
+      <SurveyModal ref={surveyModalRef} />
       {packageData && (
         <ComboCard smartDevices={packageData!.smartDevicePackages} />
       )}
@@ -72,7 +75,12 @@ const PackageDetail: React.FC = () => {
       ))}
       <div className="group__button">
         <button className="btn-chat">Chat</button>
-        <button className="btn-send">Gửi yêu cầu khảo sát</button>
+        <button
+          className="btn-send"
+          onClick={() => surveyModalRef.current.openModal()}
+        >
+          Gửi yêu cầu khảo sát
+        </button>
       </div>
     </div>
   );

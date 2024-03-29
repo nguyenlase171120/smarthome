@@ -8,6 +8,7 @@ export const END_POINTS = {
     PACKAGE: "/customer-role/packages",
     PACKAGE_DETAIL: "/customer-role/packages/:id",
     CONTRACT: "/customer-role/contracts",
+    SURVEY: "/customer-role/survey",
   },
 };
 
@@ -29,4 +30,5 @@ export const ROUTES_NON_FOOTER_HEADER = [
   END_POINTS.CUSTOMER_ROLE.HOME,
   END_POINTS.CUSTOMER_ROLE.PACKAGE,
   END_POINTS.CUSTOMER_ROLE.CONTRACT,
+  END_POINTS.CUSTOMER_ROLE.SURVEY,
 ];
