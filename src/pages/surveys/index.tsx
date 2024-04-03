@@ -1,16 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import SurveyRequestAPI from "../../api/Survey";
-import {
-  Button,
-  Card,
-  Descriptions,
-  Flex,
-  Input,
-  Skeleton,
-  Tag,
-  message,
-} from "antd";
+import { Card, Descriptions, Flex, Input, Skeleton } from "antd";
 import {
   onHandleErrorAPIResponse,
   onLoadSurveyStatus,
@@ -18,6 +9,7 @@ import {
 import { SurveyItemTypes } from "../../types/Survey";
 import dayjs from "dayjs";
 import { DateTimeFormat } from "../../enums";
+import { CUSTOMER_ID } from "../../utils/constant";
 
 const Surveys = () => {
   const {
@@ -36,7 +28,7 @@ const Surveys = () => {
 
   useEffect(() => {
     getSurveyList({
-      customerId: "ba192f6f-e0fb-46f4-b427-4cb324f6538c",
+      customerId: CUSTOMER_ID,
     });
   }, []);
 

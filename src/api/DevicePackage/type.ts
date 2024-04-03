@@ -1,4 +1,5 @@
 import {
+  CustomerItemTypes,
   ImageItemTypes,
   ManufactureItemTypes,
   PromotionItemTypes,
@@ -21,9 +22,18 @@ export type DevicePackageTypes = {
 
 export type DevicePackageDetailTypes = {
   smartDevicePackages: SmartDevicePackageItemTypes[];
+  feedbackDevicePackages: FeedbackItemTypes[];
 } & DevicePackageTypes;
 
 export type SmartDevicePackageItemTypes = {
   smartDeviceQuantity: number;
   smartDevice: SmartDeviceItemTypes;
+};
+
+export type FeedbackItemTypes = {
+  content: string;
+  createdAt: string;
+  customer: CustomerItemTypes;
+  id: string;
+  rating: number;
 };

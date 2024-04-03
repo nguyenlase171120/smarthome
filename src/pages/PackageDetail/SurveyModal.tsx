@@ -5,6 +5,7 @@ import SurveyRequestAPI from "../../api/Survey";
 import { onHandleErrorAPIResponse } from "../../utils/helper";
 import dayjs from "dayjs";
 import { DateTimeFormat } from "../../enums";
+import { CUSTOMER_ID } from "../../utils/constant";
 
 const SurveyModal = ({}, ref: any) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -33,7 +34,7 @@ const SurveyModal = ({}, ref: any) => {
 
   const onSubmit = (value: { description: string; surveyDate: string }) => {
     createNewSurvey({
-      customerId: "ba192f6f-e0fb-46f4-b427-4cb324f6538c",
+      customerId: CUSTOMER_ID,
       description: value.description,
       surveyDate: dayjs(value.surveyDate).format(DateTimeFormat.DATE_FORMAT),
     });

@@ -1,19 +1,25 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import "./PackageDetail.css";
-import CommentCard from "../../components/Card/CommentCard";
 import { useMutation } from "@tanstack/react-query";
 import DevicePackagesAPI from "../../api/DevicePackage";
 import { onHandleErrorAPIResponse } from "../../utils/helper";
-import { Skeleton } from "antd";
+import { Avatar, Button, Flex, List, Skeleton } from "antd";
 import ComboCard from "../../components/Card/PackageCard";
-import { DevicePackageDetailTypes } from "../../api/DevicePackage/type";
+import {
+  DevicePackageDetailTypes,
+  FeedbackItemTypes,
+} from "../../api/DevicePackage/type";
 import SurveyModal from "./SurveyModal";
+import FeedbackModal from "./Feedback";
+import { CUSTOMER_ID } from "../../utils/constant";
 
 const PackageDetail: React.FC = () => {
   const { id }: any = useParams();
   const [packageData, setPackage] = useState<DevicePackageDetailTypes>();
   const surveyModalRef = useRef<any>();
+  const createFeedbackModalRef = useRef<any>();
+  const [feedbackUpdate, setFeedbackUpdate] = useState<FeedbackItemTypes>();
 
   const {
     isPending: isDeviceByPackageIdLoading,
@@ -28,30 +34,6 @@ const PackageDetail: React.FC = () => {
     },
   });
 
-  const lstComment = [
-    {
-      key: 1,
-      avatar:
-        "https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png",
-      name: "User 1",
-      content: "Review 1",
-    },
-    {
-      key: 2,
-      avatar:
-        "https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png",
-      name: "User 2",
-      content: "Review 2",
-    },
-    {
-      key: 3,
-      avatar:
-        "https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png",
-      name: "User 3",
-      content: "Review 3",
-    },
-  ];
-
   useEffect(() => {
     if (id) {
       getDevicesByPackageId(id);
@@ -62,26 +44,83 @@ const PackageDetail: React.FC = () => {
     return <Skeleton active />;
   }
 
+  const onCheckCustomerFeedback = () => {
+    if (packageData) {
+      const isExistCustomer = packageData.feedbackDevicePackages.some(
+        (item) => item.customer.accountId === CUSTOMER_ID
+      );
+      return isExistCustomer;
+    }
+
+    return false;
+  };
+
   return (
     <div className="container-main content-wrapper detail-package-wrapper">
       <SurveyModal ref={surveyModalRef} />
+      <FeedbackModal
+        ref={createFeedbackModalRef}
+        PackageId={packageData?.id as string}
+        FeedbackUpdateProp={feedbackUpdate as FeedbackItemTypes}
+        HandleAfterCloseModal={() => getDevicesByPackageId(id)}
+      />
+
       {packageData && (
         <ComboCard smartDevices={packageData!.smartDevicePackages} />
       )}
 
-      <h5>Nhận Xét</h5>
-      {lstComment.map((comment: any) => (
-        <CommentCard key={comment.key} item={comment} />
-      ))}
-      <div className="group__button">
-        <button className="btn-chat">Chat</button>
-        <button
-          className="btn-send"
-          onClick={() => surveyModalRef.current.openModal()}
+      <Flex align="center" justify="space-between">
+        <h5>Nhận Xét</h5>
+
+        {!onCheckCustomerFeedback() && (
+          <Button onClick={() => createFeedbackModalRef.current.openModal()}>
+            Thêm nhận xét
+          </Button>
+        )}
+      </Flex>
+
+      {packageData && packageData!.feedbackDevicePackages.length > 0 ? (
+        <List
+          dataSource={packageData?.feedbackDevicePackages}
+          pagination={{ position: "bottom", align: "end" }}
+          style={{ marginBottom: "1rem" }}
         >
+          {packageData?.feedbackDevicePackages.map((feedback, index) => {
+            return (
+              <List.Item key={feedback.id}>
+                <List.Item.Meta
+                  avatar={
+                    <Avatar
+                      src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`}
+                    />
+                  }
+                  title={
+                    <a href="https://ant.design">
+                      {feedback.customer.fullName}
+                    </a>
+                  }
+                  description={feedback.content}
+                />
+              </List.Item>
+            );
+          })}
+        </List>
+      ) : (
+        <Flex
+          align="center"
+          justify="center"
+          style={{ margin: "0.5rem", width: "100%" }}
+        >
+          <p>Chưa có nhận xét nào</p>
+        </Flex>
+      )}
+
+      <Flex gap="middle">
+        <Button block>Trò chuyện</Button>
+        <Button type="primary" block>
           Gửi yêu cầu khảo sát
-        </button>
-      </div>
+        </Button>
+      </Flex>
     </div>
   );
 };

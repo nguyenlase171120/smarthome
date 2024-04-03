@@ -24,6 +24,7 @@ export const END_POINTS_API = {
 
   CONTRACTS: "/api/contracts",
   SURVEY: "/api/survey-requests",
+  FEEDBACK: "/api/feedbacks",
 };
 
 export const ROUTES_NON_FOOTER_HEADER = [
@@ -32,3 +33,5 @@ export const ROUTES_NON_FOOTER_HEADER = [
   END_POINTS.CUSTOMER_ROLE.CONTRACT,
   END_POINTS.CUSTOMER_ROLE.SURVEY,
 ];
+
+export const CUSTOMER_ID = "ba192f6f-e0fb-46f4-b427-4cb324f6538c";
