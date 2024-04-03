@@ -9,12 +9,18 @@ import {
   Row,
   message,
 } from "antd";
-import React, { forwardRef, useImperativeHandle, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { FrownOutlined, MehOutlined, SmileOutlined } from "@ant-design/icons";
 import { useMutation } from "@tanstack/react-query";
 import FeedbackAPI from "../../../api/Feedback";
 import { FeedbackItemTypes } from "../../../api/DevicePackage/type";
 import { CUSTOMER_ID } from "../../../utils/constant";
+import { onHandleErrorAPIResponse } from "../../../utils/helper";
 
 const customIcons: Record<number, React.ReactNode> = {
   1: <FrownOutlined />,
@@ -50,6 +56,29 @@ const FeedbackModal = (
       },
     });
 
+  const { isPending: isLoadingUpdateFeedback, mutate: updateFeedBack } =
+    useMutation({
+      mutationFn: FeedbackAPI.UpdateFeedback,
+      mutationKey: ["feedback-api"],
+      onError: (errorResponse) => {
+        onHandleErrorAPIResponse(errorResponse);
+      },
+      onSuccess: () => {
+        message.success("Cập nhật nhận xét thành công");
+        HandleAfterCloseModal();
+        onCloseModal();
+      },
+    });
+
+  useEffect(() => {
+    if (FeedbackUpdateProp) {
+      form.setFieldsValue({
+        rating: FeedbackUpdateProp.rating,
+        content: FeedbackUpdateProp.content,
+      });
+    }
+  }, [FeedbackUpdateProp]);
+
   useImperativeHandle(ref, () => {
     return {
       openModal: () => setIsOpenModal(true),
@@ -61,11 +90,19 @@ const FeedbackModal = (
   };
 
   const onSubmitFeedback = (values: { rating: number; content: string }) => {
-    createFeedback({
-      ...values,
-      customerId: CUSTOMER_ID,
-      devicePackageId: PackageId,
-    });
+    if (FeedbackUpdateProp) {
+      updateFeedBack({
+        content: values.content,
+        id: FeedbackUpdateProp.id,
+        rating: values.rating,
+      });
+    } else {
+      createFeedback({
+        ...values,
+        customerId: CUSTOMER_ID,
+        devicePackageId: PackageId,
+      });
+    }
   };
 
   return (
@@ -81,10 +118,7 @@ const FeedbackModal = (
           <Col span={24}>
             <Flex justify="center">
               <Form.Item name="rating">
-                <Rate
-                  defaultValue={3}
-                  character={({ index = 0 }) => customIcons[index + 1]}
-                />
+                <Rate character={({ index = 0 }) => customIcons[index + 1]} />
               </Form.Item>
             </Flex>
           </Col>
@@ -105,13 +139,13 @@ const FeedbackModal = (
 
           <Col span={24}>
             <Flex align="center" justify="end" gap="middle">
-              <Button onClick={onCloseModal}>Cancel</Button>
+              <Button onClick={onCloseModal}>Đóng cửa sổ</Button>
               <Button
                 type="primary"
-                loading={isLoadingCreateFeedback}
+                loading={isLoadingCreateFeedback || isLoadingUpdateFeedback}
                 htmlType="submit"
               >
-                Confirm
+                {FeedbackUpdateProp ? "Cập nhật nhận xét" : "Nhận xét"}
               </Button>
             </Flex>
           </Col>

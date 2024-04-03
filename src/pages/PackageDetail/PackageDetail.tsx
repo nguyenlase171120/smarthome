@@ -13,6 +13,7 @@ import {
 import SurveyModal from "./SurveyModal";
 import FeedbackModal from "./Feedback";
 import { CUSTOMER_ID } from "../../utils/constant";
+import { EditOutlined } from "@ant-design/icons";
 
 const PackageDetail: React.FC = () => {
   const { id }: any = useParams();
@@ -53,6 +54,11 @@ const PackageDetail: React.FC = () => {
     }
 
     return false;
+  };
+
+  const onUpdateFeedback = (feedBack: FeedbackItemTypes) => {
+    setFeedbackUpdate(feedBack);
+    createFeedbackModalRef.current.openModal();
   };
 
   return (
@@ -101,6 +107,14 @@ const PackageDetail: React.FC = () => {
                   }
                   description={feedback.content}
                 />
+
+                {feedback.customer.accountId === CUSTOMER_ID && (
+                  <Button
+                    icon={<EditOutlined />}
+                    type="primary"
+                    onClick={() => onUpdateFeedback(feedback)}
+                  />
+                )}
               </List.Item>
             );
           })}
@@ -117,7 +131,11 @@ const PackageDetail: React.FC = () => {
 
       <Flex gap="middle">
         <Button block>Trò chuyện</Button>
-        <Button type="primary" block>
+        <Button
+          type="primary"
+          block
+          onClick={() => surveyModalRef.current.openModal()}
+        >
           Gửi yêu cầu khảo sát
         </Button>
       </Flex>

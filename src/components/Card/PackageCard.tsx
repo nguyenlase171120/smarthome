@@ -10,12 +10,10 @@ import useConvert from "../../hooks/useConvert";
 import { useHistory } from "react-router";
 import { END_POINTS } from "../../utils/constant";
 import {
-  DevicePackageDetailTypes,
   DevicePackageTypes,
   SmartDevicePackageItemTypes,
 } from "../../api/DevicePackage/type";
 import { Image } from "antd";
-import { SmartDeviceItemTypes } from "../../types";
 
 interface Props {
   lstData?: DevicePackageTypes[];
@@ -51,7 +49,7 @@ const ComboCard: React.FC<Props> = ({
           <IonCardHeader>
             <IonCardTitle>{convert.toMoney(item.price) || 0}</IonCardTitle>
             <p className="package-card__desc">
-              {item.name}
+              {item.description}
               {isShowBtnMore && (
                 <a
                   style={{
@@ -64,13 +62,10 @@ const ComboCard: React.FC<Props> = ({
                 </a>
               )}
             </p>
-            <IonCardSubtitle>
-              {item.description.slice(0, 35) + "..."}
-            </IonCardSubtitle>
+            <IonCardSubtitle>{item.name.slice(0, 35) + "..."}</IonCardSubtitle>
           </IonCardHeader>
         </IonCard>
       ))}
-
       {smartDevices?.length > 0 &&
         smartDevices?.map((item) => {
           const device = item.smartDevice;
