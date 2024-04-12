@@ -8,6 +8,7 @@ export enum SurveyStatusEnum {
   PENDING = "Pending",
   COMPLETED = "Completed",
   REJECTED = "Rejected",
+  ALL = "",
 }
 
 export enum NavigateMenuEnum {
@@ -15,4 +16,9 @@ export enum NavigateMenuEnum {
   CONTRACT = "Contract",
   SURVEY = "Survey",
   PROFILE = "Profile",
+}
+
+export enum SystemRole {
+  STAFF = "Staff",
+  CUSTOMER = "Customer",
 }

@@ -37,6 +37,7 @@ import { END_POINTS } from "./utils/constant";
 import CustomerContract from "./pages/Contract";
 import Surveys from "./pages/surveys";
 import UserProfile from "./pages/profile";
+import SurveyReports from "./pages/Report";
 
 setupIonicReact();
 
@@ -51,6 +52,10 @@ const App: React.FC = () => (
 
         <Route exact path={END_POINTS.CUSTOMER_ROLE.HOME}>
           <Home />
+        </Route>
+
+        <Route exact path={END_POINTS.STAFF_ROLE.SURVEY_REPORT}>
+          <SurveyReports />
         </Route>
 
         <Route exact path={END_POINTS.USER_PROFILE}>

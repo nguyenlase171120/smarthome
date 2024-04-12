@@ -49,7 +49,7 @@ const Login: React.FC = () => {
 
   if (userProfileResponse && isSuccess) {
     dispatch(updateUserProfile(userProfileResponse as any));
-    history.replace(END_POINTS.CUSTOMER_ROLE.HOME);
+    history.replace(END_POINTS.STAFF_ROLE.SURVEY_REPORT);
   }
 
   return (
@@ -89,15 +89,7 @@ const Login: React.FC = () => {
             <Form.Item
               label="Password"
               name="password"
-              rules={[
-                { required: true, message: "Password is required" },
-                {
-                  pattern:
-                    /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
-                  message:
-                    "Password must at least 8 characters, one letter and one number",
-                },
-              ]}
+              rules={[{ required: true, message: "Password is required" }]}
             >
               <Input.Password autoComplete="password" placeholder="123456aA!" />
             </Form.Item>
