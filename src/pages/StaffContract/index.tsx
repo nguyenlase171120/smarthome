@@ -25,7 +25,8 @@ const StaffContract = () => {
       onHandleErrorAPIResponse(error);
     },
     onSuccess: (res) => {
-      setContracts(res.data);
+      const result = res.data.filter((contract: ContractItemTypes) => contract.status !== ContractStatusEnum.PENDiNG_DEPOSIT && contract.status !== ContractStatusEnum.CANCELLED);
+      setContracts(result);
     },
   });
 

@@ -46,9 +46,9 @@ const Login: React.FC = () => {
     return <Skeleton />;
   }
 
-  if (userProfileResponse && isSuccess) {
-    const newUser: UserProfileTypes = userProfileResponse as any;
+  const newUser: UserProfileTypes = userProfileResponse as any;
 
+  if (newUser?.email && isSuccess) {
     dispatch(updateUserProfile(userProfileResponse as any));
 
     if (newUser.status.toLowerCase() === "staff") {

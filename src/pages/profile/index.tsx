@@ -1,13 +1,32 @@
 import { Avatar, Button, Divider, Flex, Typography } from "antd";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { USER_PROFILE_LIST } from "./constant";
+import { updateUserProfile } from "../../redux/userProfileSlice";
+import { useHistory } from "react-router";
+import { END_POINTS } from "../../utils/constant";
 
 const UserProfile = () => {
-  const userProfileState = useSelector(
-    (selector: RootState) => selector.userProfile.profile
-  );
+  const userProfileState = useSelector((selector: RootState) => selector.userProfile.profile);
+  const dispatch = useDispatch();
+  const history = useHistory();
 
+  const onHandleLogout = () => {
+    localStorage.clear();
+    dispatch(
+      updateUserProfile({
+        id: "",
+        phoneNumber: "",
+        fullName: "",
+        email: "",
+        avatar: null,
+        roleName: "",
+        status: "",
+        createAt: "",
+      })
+    );
+    history.replace(END_POINTS.AUTHENTICATION.LOGIN);
+  };
   return (
     <Flex vertical gap="middle">
       <Flex gap="middle">
@@ -27,7 +46,11 @@ const UserProfile = () => {
         </Flex>
       </Flex>
 
-      <Flex vertical gap={10}>
+      <Button block type="primary" onClick={onHandleLogout}>
+        Logout
+      </Button>
+
+      {/* <Flex vertical gap={10}>
         {USER_PROFILE_LIST.priority.map((item) => {
           return (
             <Flex gap={10} style={{ cursor: "pointer" }}>
@@ -57,7 +80,7 @@ const UserProfile = () => {
             </Flex>
           );
         })}
-      </Flex>
+      </Flex> */}
     </Flex>
   );
 };
