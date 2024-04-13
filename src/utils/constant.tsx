@@ -1,9 +1,4 @@
-import {
-  FileTextOutlined,
-  HomeOutlined,
-  PhoneOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { FileTextOutlined, HomeOutlined, PhoneOutlined, UserOutlined, AuditOutlined } from "@ant-design/icons";
 
 export const END_POINTS = {
   AUTHENTICATION: {
@@ -20,6 +15,8 @@ export const END_POINTS = {
   USER_PROFILE: "/user-profile",
   STAFF_ROLE: {
     SURVEY_REPORT: "/staff-role/survey-report",
+    SURVEY_REQUEST: "/staff-role/survey-request",
+    CONTRACT: "/staff-role/contract",
   },
 };
 
@@ -46,6 +43,8 @@ export const ROUTES_NON_FOOTER_HEADER = [
   END_POINTS.CUSTOMER_ROLE.SURVEY,
   END_POINTS.USER_PROFILE,
   END_POINTS.STAFF_ROLE.SURVEY_REPORT,
+  END_POINTS.STAFF_ROLE.SURVEY_REQUEST,
+  END_POINTS.STAFF_ROLE.CONTRACT,
 ];
 
 export const CUSTOMER_ID = "ba192f6f-e0fb-46f4-b427-4cb324f6538c";
@@ -58,8 +57,13 @@ export const STAFF_FOOTER = [
   },
   {
     label: "Hợp đồng",
-    value: END_POINTS.STAFF_ROLE.SURVEY_REPORT,
+    value: END_POINTS.STAFF_ROLE.CONTRACT,
     icon: <FileTextOutlined />,
+  },
+  {
+    label: "Yêu cầu khảo sát",
+    value: END_POINTS.STAFF_ROLE.SURVEY_REQUEST,
+    icon: <AuditOutlined />,
   },
   {
     label: "Tài khoản",

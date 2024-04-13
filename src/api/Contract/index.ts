@@ -4,7 +4,9 @@ import { ContractListByCustomerId } from "./type";
 
 const ContractAPI = {
   getAllContracts: (params?: ContractListByCustomerId) =>
-    axiosClient.get(END_POINTS_API.CONTRACTS),
+    axiosClient.get(END_POINTS_API.CONTRACTS, {
+      params,
+    }),
 };
 
 export default ContractAPI;

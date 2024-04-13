@@ -27,17 +27,16 @@ const Login: React.FC = () => {
     enabled: false,
   });
 
-  const { mutate: mutateLoginAccount, isPending: isLoadingLoginAccount } =
-    useMutation({
-      mutationFn: AuthenticationAPI.LoginAccount,
-      onSuccess: (response: any) => {
-        localStorage.setItem("accessToken", response.accessToken);
-        getUserProfile();
-      },
-      onError: (errorResponse) => {
-        onHandleErrorAPIResponse(errorResponse);
-      },
-    });
+  const { mutate: mutateLoginAccount, isPending: isLoadingLoginAccount } = useMutation({
+    mutationFn: AuthenticationAPI.LoginAccount,
+    onSuccess: (response: any) => {
+      localStorage.setItem("accessToken", response.accessToken);
+      getUserProfile();
+    },
+    onError: (errorResponse) => {
+      onHandleErrorAPIResponse(errorResponse);
+    },
+  });
 
   const onFinish = (values: LoginAccountTypes): void => {
     mutateLoginAccount(values);
@@ -48,20 +47,22 @@ const Login: React.FC = () => {
   }
 
   if (userProfileResponse && isSuccess) {
+    const newUser: UserProfileTypes = userProfileResponse as any;
+
     dispatch(updateUserProfile(userProfileResponse as any));
-    history.replace(END_POINTS.STAFF_ROLE.SURVEY_REPORT);
+
+    if (newUser.status.toLowerCase() === "staff") {
+      history.replace(END_POINTS.STAFF_ROLE.SURVEY_REPORT);
+    } else {
+      history.replace(END_POINTS.CUSTOMER_ROLE.HOME);
+    }
   }
 
   return (
     <IonPage className="layout-auth">
       <IonContent className="main">
         <div className="header">
-          <Heading
-            title="Welcome Back"
-            helper="Enter your details to login"
-            level={3}
-            titleSize={20}
-          />
+          <Heading title="Welcome Back" helper="Enter your details to login" level={3} titleSize={20} />
         </div>
 
         <Form onFinish={onFinish} requiredMark={false} layout="vertical">
@@ -86,22 +87,13 @@ const Login: React.FC = () => {
             <Input placeholder="(xxx) xxx-xxxx" name="phoneNumber" />
           </Form.Item>
           <div>
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={[{ required: true, message: "Password is required" }]}
-            >
+            <Form.Item label="Password" name="password" rules={[{ required: true, message: "Password is required" }]}>
               <Input.Password autoComplete="password" placeholder="123456aA!" />
             </Form.Item>
           </div>
 
           <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              style={{ width: "100%", height: "40px" }}
-              loading={isLoadingLoginAccount}
-            >
+            <Button type="primary" htmlType="submit" style={{ width: "100%", height: "40px" }} loading={isLoadingLoginAccount}>
               Login Account
             </Button>
           </Form.Item>

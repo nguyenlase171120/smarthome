@@ -1,10 +1,5 @@
 import { Redirect, Route } from "react-router-dom";
-import {
-  IonApp,
-  IonContent,
-  IonRouterOutlet,
-  setupIonicReact,
-} from "@ionic/react";
+import { IonApp, IonContent, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import Home from "./pages/Home/Home";
 import Login from "./pages/auth/login/Login";
@@ -38,6 +33,8 @@ import CustomerContract from "./pages/Contract";
 import Surveys from "./pages/surveys";
 import UserProfile from "./pages/profile";
 import SurveyReports from "./pages/Report";
+import StaffContract from "./pages/StaffContract";
+import StaffSurvey from "./pages/StaffSurvey";
 
 setupIonicReact();
 
@@ -56,6 +53,14 @@ const App: React.FC = () => (
 
         <Route exact path={END_POINTS.STAFF_ROLE.SURVEY_REPORT}>
           <SurveyReports />
+        </Route>
+
+        <Route exact path={END_POINTS.STAFF_ROLE.CONTRACT}>
+          <StaffContract />
+        </Route>
+
+        <Route exact path={END_POINTS.STAFF_ROLE.SURVEY_REQUEST}>
+          <StaffSurvey />
         </Route>
 
         <Route exact path={END_POINTS.USER_PROFILE}>
