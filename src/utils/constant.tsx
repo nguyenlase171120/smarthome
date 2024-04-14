@@ -1,4 +1,10 @@
-import { FileTextOutlined, HomeOutlined, PhoneOutlined, UserOutlined, AuditOutlined } from "@ant-design/icons";
+import {
+  FileTextOutlined,
+  HomeOutlined,
+  PhoneOutlined,
+  UserOutlined,
+  AuditOutlined,
+} from "@ant-design/icons";
 
 export const END_POINTS = {
   AUTHENTICATION: {
@@ -34,6 +40,8 @@ export const END_POINTS_API = {
   SURVEY: "/api/survey-requests",
   FEEDBACK: "/api/feedbacks",
   SURVEY_REPORT: "/api/survey-reports",
+  CONTRACT_IMAGE: "/api/contracts/upload-image",
+  CONTRACT_ACCEPTANCE: "/api/contracts/upload-acceptance",
 };
 
 export const ROUTES_NON_FOOTER_HEADER = [

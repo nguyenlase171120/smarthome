@@ -19,3 +19,13 @@
   color: #414141;
   font-weight: 500;
 }
+
+.upload-btn {
+  border: 1px solid gray;
+  border-radius: 0.25rem;
+  padding: 4px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
