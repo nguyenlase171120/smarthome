@@ -31,6 +31,7 @@ export const END_POINTS = {
 
 export const END_POINTS_API = {
   STAFF: "/api/staffs",
+  TELLER: "/api/tellers",
   SIGN_IN: "/api/auth",
   PACKAGES: {
     GET_ALL: "/api/device-packages",

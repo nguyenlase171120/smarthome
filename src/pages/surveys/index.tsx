@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { useEffect } from "react";
 import SurveyRequestAPI from "../../api/Survey";
-import { Card, Descriptions, Flex, Input, Skeleton } from "antd";
+import { Card, Descriptions, Empty, Flex, Input, Skeleton } from "antd";
 import {
   onHandleErrorAPIResponse,
   onLoadSurveyStatus,
@@ -39,6 +39,10 @@ const Surveys = () => {
 
   if (isPendingSurveyList) {
     return <Skeleton />;
+  }
+
+  if (!surveyList?.data.length) {
+    return <Empty />;
   }
 
   return (

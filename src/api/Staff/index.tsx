@@ -1,4 +1,3 @@
-import { StaffParamsTypes } from "../../types/Staff";
 import { END_POINTS_API } from "../../utils/constant";
 import axiosClient from "../axiosClient";
 

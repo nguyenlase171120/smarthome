@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userProfileSlice from "./userProfileSlice";
-import staffSlice from "./staffSlice";
+import staffSlice from "./tellerSlice";
 
 export const store = configureStore({
   reducer: {

@@ -12,11 +12,11 @@ const ChatServerComponent = ({ children }: any) => {
   const syncUser = useCallback(
     () =>
       new Talk.User({
-        id: userProfileState.id,
+        id: userProfileState.id || "",
         name: userProfileState.fullName,
         email: userProfileState.email,
         photoUrl: "https://talkjs.com/new-web/avatar-5.jpg",
-        welcomeMessage: "Hi!",
+        welcomeMessage: "Chào bạn",
       }),
     []
   );

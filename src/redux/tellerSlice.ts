@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { StaffItemTypes } from "../types";
+import { StaffItemTypes, TellerItemTypes } from "../types";
 
-export const staffSlice = createSlice({
-  name: "staffs",
+export const tellerSlice = createSlice({
+  name: "tellers",
   initialState: {
     account: {
       accountId: "",
@@ -12,19 +12,18 @@ export const staffSlice = createSlice({
       fullName: "",
       email: "",
       avatar: null,
-      isLead: true,
       status: "",
       createAt: "",
     },
   },
   reducers: {
-    selectChatWithStaff: (state, action: PayloadAction<StaffItemTypes>) => {
+    selectChatWithStaff: (state, action: PayloadAction<TellerItemTypes>) => {
       state.account = action.payload;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { selectChatWithStaff } = staffSlice.actions;
+export const { selectChatWithStaff } = tellerSlice.actions;
 
-export default staffSlice.reducer;
+export default tellerSlice.reducer;
