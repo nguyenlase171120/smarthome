@@ -113,3 +113,6 @@ export const CUSTOMER_FOOTER = [
     icon: <UserOutlined />,
   },
 ];
+
+export const DEFAULT_AVATAR =
+  "https://img.freepik.com/premium-vector/bald-empty-face-icon-avatar-vector-illustration_601298-13391.jpg";
