@@ -1,13 +1,14 @@
-import { Avatar, Button, Divider, Flex, Typography } from "antd";
+import { Avatar, Button, Flex } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { USER_PROFILE_LIST } from "./constant";
 import { updateUserProfile } from "../../redux/userProfileSlice";
 import { useHistory } from "react-router";
 import { END_POINTS } from "../../utils/constant";
 
 const UserProfile = () => {
-  const userProfileState = useSelector((selector: RootState) => selector.userProfile.profile);
+  const userProfileState = useSelector(
+    (selector: RootState) => selector.userProfile.profile
+  );
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -42,12 +43,12 @@ const UserProfile = () => {
         <Flex vertical gap={10}>
           <div style={{ fontWeight: "500" }}>{userProfileState.fullName}</div>
           <div style={{ fontSize: "14px" }}>{userProfileState.phoneNumber}</div>
-          <Button type="primary">Edit Profile</Button>
+          <Button type="primary">Chỉnh sửa thông tin</Button>
         </Flex>
       </Flex>
 
       <Button block type="primary" onClick={onHandleLogout}>
-        Logout
+        Đăng xuất
       </Button>
 
       {/* <Flex vertical gap={10}>

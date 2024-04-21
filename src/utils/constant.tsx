@@ -4,6 +4,7 @@ import {
   PhoneOutlined,
   UserOutlined,
   AuditOutlined,
+  MessageOutlined,
 } from "@ant-design/icons";
 
 export const END_POINTS = {
@@ -17,6 +18,8 @@ export const END_POINTS = {
     PACKAGE_DETAIL: "/customer-role/packages/:id",
     CONTRACT: "/customer-role/contracts",
     SURVEY: "/customer-role/survey",
+    CHAT: "/customer-role/chat",
+    CHAT_DETAiL: "/customer-role/chat/123",
   },
   USER_PROFILE: "/user-profile",
   STAFF_ROLE: {
@@ -27,6 +30,7 @@ export const END_POINTS = {
 };
 
 export const END_POINTS_API = {
+  STAFF: "/api/staffs",
   SIGN_IN: "/api/auth",
   PACKAGES: {
     GET_ALL: "/api/device-packages",
@@ -53,6 +57,7 @@ export const ROUTES_NON_FOOTER_HEADER = [
   END_POINTS.STAFF_ROLE.SURVEY_REPORT,
   END_POINTS.STAFF_ROLE.SURVEY_REQUEST,
   END_POINTS.STAFF_ROLE.CONTRACT,
+  END_POINTS.CUSTOMER_ROLE.CHAT,
 ];
 
 export const CUSTOMER_ID = "ba192f6f-e0fb-46f4-b427-4cb324f6538c";
@@ -95,6 +100,11 @@ export const CUSTOMER_FOOTER = [
     label: "Khảo sát",
     value: END_POINTS.CUSTOMER_ROLE.SURVEY,
     icon: <PhoneOutlined />,
+  },
+  {
+    label: "Trò chuyện",
+    value: END_POINTS.CUSTOMER_ROLE.CHAT,
+    icon: <MessageOutlined />,
   },
   {
     label: "Tài khoản",

@@ -47,7 +47,7 @@ const SurveyModal = ({}, ref: any) => {
   return (
     <Modal
       open={isOpenModal}
-      title="Survey"
+      title="Yêu cẩu khảo sát"
       onCancel={onCloseModal}
       closeIcon
       footer

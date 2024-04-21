@@ -1,5 +1,10 @@
 import { Redirect, Route } from "react-router-dom";
-import { IonApp, IonContent, IonRouterOutlet, setupIonicReact } from "@ionic/react";
+import {
+  IonApp,
+  IonContent,
+  IonRouterOutlet,
+  setupIonicReact,
+} from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import Home from "./pages/Home/Home";
 import Login from "./pages/auth/login/Login";
@@ -35,6 +40,8 @@ import UserProfile from "./pages/profile";
 import SurveyReports from "./pages/Report";
 import StaffContract from "./pages/StaffContract";
 import StaffSurvey from "./pages/StaffSurvey";
+import CustomerChat from "./pages/Chat";
+import ChatDetail from "./pages/Chat/ChatDetail";
 
 setupIonicReact();
 
@@ -82,6 +89,13 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/">
           <Redirect to={END_POINTS.AUTHENTICATION.LOGIN} />
+        </Route>
+
+        <Route exact path={END_POINTS.CUSTOMER_ROLE.CHAT}>
+          <CustomerChat />
+        </Route>
+        <Route exact path={END_POINTS.CUSTOMER_ROLE.CHAT_DETAiL}>
+          <ChatDetail />
         </Route>
       </IonContent>
       <Footer />
