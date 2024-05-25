@@ -30,7 +30,7 @@ const PackageDetail: React.FC = () => {
   );
 
   const {
-    isLoading: isDeviceByPackageIdLoading,
+    isPending: isDeviceByPackageIdLoading,
     mutate: getDevicesByPackageId,
   } = useMutation({
     mutationFn: DevicePackagesAPI.getDeviceByPackageId,

@@ -12,7 +12,7 @@ const CustomerContract = () => {
   const [contracts, setContracts] = useState<ContractItemTypes[]>([]);
 
   const {
-    isLoading: isLoadingContractList,
+    isPending: isLoadingContractList,
     data,
     mutate: mutateContracts,
   } = useMutation({

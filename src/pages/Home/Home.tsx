@@ -12,7 +12,7 @@ const Home: React.FC = () => {
   const [packages, setPackages] = useState<DevicePackageTypes[]>([]);
 
   const {
-    isLoading: isDevicePackagesLoading,
+    isPending: isDevicePackagesLoading,
     mutate: mutateAllDevicePackages,
     data: devicePackages,
   } = useMutation({

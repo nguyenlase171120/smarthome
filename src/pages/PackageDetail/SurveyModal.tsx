@@ -14,7 +14,7 @@ const SurveyModal = ({}, ref: any) => {
   );
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [form] = Form.useForm();
-  const { isLoading: isLoadingCreateNewSurvey, mutate: createNewSurvey } =
+  const { isPending: isLoadingCreateNewSurvey, mutate: createNewSurvey } =
     useMutation({
       mutationFn: SurveyRequestAPI.CreateNewSurvey,
       onError: (error) => {

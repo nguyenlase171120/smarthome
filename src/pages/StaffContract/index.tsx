@@ -31,7 +31,7 @@ const StaffContract = () => {
     (selector: RootState) => selector.userProfile.profile
   );
 
-  const { isLoading: isLoadingUploadImage, mutate: mutateUploadContractImage } =
+  const { isPending: isPendingUploadImage, mutate: mutateUploadContractImage } =
     useMutation({
       mutationFn: ContractAPI.uploadContractImage,
       mutationKey: ["contract-image"],
@@ -44,7 +44,7 @@ const StaffContract = () => {
     });
 
   const {
-    isLoading: isLoadingUploadAcceptance,
+    isPending: isPendingUploadAcceptance,
     mutate: mutateUploadAcceptanceImage,
   } = useMutation({
     mutationFn: ContractAPI.uploadContractAcceptance,
@@ -58,7 +58,7 @@ const StaffContract = () => {
   });
 
   const {
-    isLoading: isLoadingContractList,
+    isPending: isLoadingContractList,
     data: contractsResponse,
     mutate: mutateContracts,
   } = useMutation({
@@ -76,7 +76,7 @@ const StaffContract = () => {
     },
   });
 
-  const { isLoading: isLoadingUpdateContract, mutate: updateContractStatus } =
+  const { isPending: isPendingUpdateContract, mutate: updateContractStatus } =
     useMutation({
       mutationFn: ContractAPI.updateContract,
       mutationKey: [""],
@@ -181,10 +181,10 @@ const StaffContract = () => {
     <Flex vertical gap="middle">
       <Spin
         spinning={
-          isLoadingUploadImage ||
-          isLoadingUploadAcceptance ||
+          isPendingUploadImage ||
+          isPendingUploadAcceptance ||
           isLoadingContractList ||
-          isLoadingUpdateContract
+          isPendingUpdateContract
         }
       >
         <Flex gap={5} align="center">
