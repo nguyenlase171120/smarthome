@@ -11,6 +11,7 @@ import { END_POINTS } from "../../../utils/constant";
 import { useDispatch } from "react-redux";
 import { updateUserProfile } from "../../../redux/userProfileSlice";
 import { UserProfileTypes } from "../../../types";
+import { useEffect } from "react";
 
 const Login: React.FC = () => {
   const history = useHistory();
@@ -25,18 +26,27 @@ const Login: React.FC = () => {
     queryKey: ["user-profile"],
     queryFn: AuthenticationAPI.GetAccountLogin,
     enabled: false,
+    onSuccess: (data) => {
+      dispatch(updateUserProfile(data as any));
+      if (newUser.status.toLowerCase() === "staff") {
+        history.replace(END_POINTS.STAFF_ROLE.SURVEY_REPORT);
+      } else {
+        history.replace(END_POINTS.CUSTOMER_ROLE.HOME);
+      }
+    },
   });
 
-  const { mutate: mutateLoginAccount, isPending: isLoadingLoginAccount } = useMutation({
-    mutationFn: AuthenticationAPI.LoginAccount,
-    onSuccess: (response: any) => {
-      localStorage.setItem("accessToken", response.accessToken);
-      getUserProfile();
-    },
-    onError: (errorResponse) => {
-      onHandleErrorAPIResponse(errorResponse);
-    },
-  });
+  const { mutate: mutateLoginAccount, isLoading: isLoadingLoginAccount } =
+    useMutation({
+      mutationFn: AuthenticationAPI.LoginAccount,
+      onSuccess: (response: any) => {
+        localStorage.setItem("accessToken", response.accessToken);
+        getUserProfile();
+      },
+      onError: (errorResponse) => {
+        onHandleErrorAPIResponse(errorResponse);
+      },
+    });
 
   const onFinish = (values: LoginAccountTypes): void => {
     mutateLoginAccount(values);
@@ -48,21 +58,16 @@ const Login: React.FC = () => {
 
   const newUser: UserProfileTypes = userProfileResponse as any;
 
-  if (newUser?.email && isSuccess) {
-    dispatch(updateUserProfile(userProfileResponse as any));
-
-    if (newUser.status.toLowerCase() === "staff") {
-      history.replace(END_POINTS.STAFF_ROLE.SURVEY_REPORT);
-    } else {
-      history.replace(END_POINTS.CUSTOMER_ROLE.HOME);
-    }
-  }
-
   return (
     <IonPage className="layout-auth">
       <IonContent className="main">
         <div className="header">
-          <Heading title="Welcome Back" helper="Enter your details to login" level={3} titleSize={20} />
+          <Heading
+            title="Welcome Back"
+            helper="Enter your details to login"
+            level={3}
+            titleSize={20}
+          />
         </div>
 
         <Form onFinish={onFinish} requiredMark={false} layout="vertical">
@@ -87,13 +92,22 @@ const Login: React.FC = () => {
             <Input placeholder="(xxx) xxx-xxxx" name="phoneNumber" />
           </Form.Item>
           <div>
-            <Form.Item label="Password" name="password" rules={[{ required: true, message: "Password is required" }]}>
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[{ required: true, message: "Password is required" }]}
+            >
               <Input.Password autoComplete="password" placeholder="123456aA!" />
             </Form.Item>
           </div>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" style={{ width: "100%", height: "40px" }} loading={isLoadingLoginAccount}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{ width: "100%", height: "40px" }}
+              loading={isLoadingLoginAccount}
+            >
               Login Account
             </Button>
           </Form.Item>

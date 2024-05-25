@@ -26,7 +26,8 @@ const UserProfile = () => {
         createAt: "",
       })
     );
-    history.replace(END_POINTS.AUTHENTICATION.LOGIN);
+
+    history.push(END_POINTS.AUTHENTICATION.LOGIN);
   };
   return (
     <Flex vertical gap="middle">
@@ -50,38 +51,6 @@ const UserProfile = () => {
       <Button block type="primary" onClick={onHandleLogout}>
         Đăng xuất
       </Button>
-
-      {/* <Flex vertical gap={10}>
-        {USER_PROFILE_LIST.priority.map((item) => {
-          return (
-            <Flex gap={10} style={{ cursor: "pointer" }}>
-              {item.icon}
-              <Typography>{item.text}</Typography>
-            </Flex>
-          );
-        })}
-        <Divider style={{ margin: 0 }} />
-
-        {USER_PROFILE_LIST.external.map((item) => {
-          return (
-            <Flex gap={10} style={{ cursor: "pointer" }}>
-              {item.icon}
-              <Typography>{item.text}</Typography>
-            </Flex>
-          );
-        })}
-
-        <Divider style={{ margin: 0 }} />
-
-        {USER_PROFILE_LIST.personal.map((item) => {
-          return (
-            <Flex gap={10} style={{ cursor: "pointer" }}>
-              {item.icon}
-              <Typography>{item.text}</Typography>
-            </Flex>
-          );
-        })}
-      </Flex> */}
     </Flex>
   );
 };

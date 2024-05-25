@@ -1,7 +1,6 @@
 import {
   Avatar,
   Badge,
-  Button,
   Descriptions,
   Empty,
   Flex,
@@ -11,8 +10,6 @@ import {
 } from "antd";
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import { SurveyItemTypes } from "../../types/Survey";
-import { SendOutlined } from "@ant-design/icons";
-import { SurveyStatusEnum } from "../../enums";
 import dayjs from "dayjs";
 import CreateSurveyReport from "../Report/CreateSurveyReport";
 
@@ -34,28 +31,13 @@ const SurveyDetail = ({ surveyItem }: SurveyDetailProps, ref: any) => {
     setIsOpenModal(false);
   };
 
-  const onOpenSurveyReport = () => {
-    createSurveyReportRef.current.openModal();
-  };
-
   return (
     <Modal
       open={isOpenModal}
       title="Chi tiết khảo sát"
       onCancel={onCloseModal}
       closeIcon
-      footer={[
-        (surveyItem && surveyItem?.status === SurveyStatusEnum.INPROGESS) ||
-          (surveyItem?.status === SurveyStatusEnum.PENDING && (
-            <Button
-              icon={<SendOutlined />}
-              type="primary"
-              onClick={onOpenSurveyReport}
-            >
-              Gửi báo cáo
-            </Button>
-          )),
-      ]}
+      footer={null}
     >
       <CreateSurveyReport
         ref={createSurveyReportRef}

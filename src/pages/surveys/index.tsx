@@ -34,7 +34,7 @@ const Surveys = () => {
   const [surveySelected, setSurveySelected] = useState<SurveyItemTypes>();
 
   const {
-    isPending: isPendingSurveyList,
+    isLoading: isLoadingSurveyList,
     mutate: getSurveyList,
     data: surveyList,
   } = useMutation({
@@ -53,7 +53,7 @@ const Surveys = () => {
     });
   }, []);
 
-  if (isPendingSurveyList) {
+  if (isLoadingSurveyList) {
     return <Skeleton />;
   }
 
@@ -74,7 +74,7 @@ const Surveys = () => {
       />
 
       <List
-        pagination={{ position: "bottom", align: "end", pageSize: 5 }}
+        pagination={{ position: "bottom", align: "end", pageSize: 10 }}
         dataSource={surveyList.data}
         renderItem={(item: SurveyItemTypes, index) => (
           <List.Item
@@ -89,7 +89,7 @@ const Surveys = () => {
           >
             <List.Item.Meta
               avatar={<Avatar shape="square" icon={<FileTextOutlined />} />}
-              title={<a href="#"> Hợp đồng {index + 1} </a>}
+              title={<a href="#"> Khảo sát {index + 1} </a>}
               description={
                 <Typography.Text> {item.description}</Typography.Text>
               }
