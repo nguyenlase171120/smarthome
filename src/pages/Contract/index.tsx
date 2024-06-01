@@ -67,7 +67,7 @@ const CustomerContract = () => {
     });
   };
 
-  if (isLoadingContractList || isLoadingPayment) {
+  if (isLoadingContractList) {
     return <Spin />;
   }
 
