@@ -12,7 +12,9 @@ import dayjs from "dayjs";
 import CreateSurveyReport from "../Report/CreateSurveyReport";
 
 const StaffSurvey = () => {
-  const userProfileState = useSelector((selector: RootState) => selector.userProfile.profile);
+  const userProfileState = useSelector(
+    (selector: RootState) => selector.userProfile.profile
+  );
   const [surveyRequest, setSurveyRequest] = useState<SurveyItemTypes[]>([]);
   const [surveyReportUpdate, setSurveyReportUpdate] = useState<any>();
 
@@ -25,7 +27,7 @@ const StaffSurvey = () => {
   };
 
   const {
-    isPending: isPendingSurveyList,
+    isLoading: isLoadingSurveyList,
     mutate: getSurveyList,
     data: surveyRequestList,
   } = useMutation({
@@ -55,7 +57,9 @@ const StaffSurvey = () => {
     const value = event.target.value.toLowerCase();
 
     if (surveyRequestList) {
-      const result = surveyRequestList.data.filter((item: SurveyItemTypes) => item.description.toLowerCase().includes(value));
+      const result = surveyRequestList.data.filter((item: SurveyItemTypes) =>
+        item.description.toLowerCase().includes(value)
+      );
       setSurveyRequest(result);
     }
   };
@@ -80,7 +84,7 @@ const StaffSurvey = () => {
     }
   };
 
-  if (isPendingSurveyList) {
+  if (isLoadingSurveyList) {
     return (
       <Flex align="center" justify="center" style={{ minHeight: "50vh" }}>
         <Spin />
@@ -100,7 +104,10 @@ const StaffSurvey = () => {
         }}
       />
       <Flex align="center" gap="middle">
-        <Input.Search placeholder="Tìm mô tả khảo sất" onChange={debounce(onSearchSurveyName, 500)} />
+        <Input.Search
+          placeholder="Tìm mô tả khảo sất"
+          onChange={debounce(onSearchSurveyName, 500)}
+        />
         <Select
           placeholder="Trạng thái"
           onChange={(event) => onFilterSurveyStatus(event)}
@@ -144,16 +151,27 @@ const StaffSurvey = () => {
                 <Flex vertical gap={8} flex={1}>
                   <Flex justify="space-between" gap="middle" align="flex-start">
                     <div className="survey-title">{item.description}</div>
-                    <Tag color={onGetStatusColor(item.status)}>{item.status}</Tag>
+                    <Tag color={onGetStatusColor(item.status)}>
+                      {item.status}
+                    </Tag>
                   </Flex>
 
                   <Flex justify="space-between" align="center" gap="middle">
-                    <div className="customer-name">{item.customer.fullName}</div>
-                    <div className="customer-name">{dayjs(item.surveyDate).format("MM/DD/YYYY HH:mm")}</div>
+                    <div className="customer-name">
+                      {item.customer.fullName}
+                    </div>
+                    <div className="customer-name">
+                      {dayjs(item.surveyDate).format("MM/DD/YYYY HH:mm")}
+                    </div>
                   </Flex>
 
                   {item.status === String(ContractStatusEnum.IN_PROGRESS) && (
-                    <Button type="primary" onClick={() => onOpenSurveyReport(item)} block size="small">
+                    <Button
+                      type="primary"
+                      onClick={() => onOpenSurveyReport(item)}
+                      block
+                      size="small"
+                    >
                       Gửi báo cáo
                     </Button>
                   )}

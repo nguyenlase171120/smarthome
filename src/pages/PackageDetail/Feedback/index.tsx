@@ -1,5 +1,20 @@
-import { Button, Col, Flex, Form, Input, Modal, Rate, Row, message } from "antd";
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import {
+  Button,
+  Col,
+  Flex,
+  Form,
+  Input,
+  Modal,
+  Rate,
+  Row,
+  message,
+} from "antd";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { FrownOutlined, MehOutlined, SmileOutlined } from "@ant-design/icons";
 import { useMutation } from "@tanstack/react-query";
 import FeedbackAPI from "../../../api/Feedback";
@@ -22,35 +37,42 @@ type FeedbackModalTypes = {
   HandleAfterCloseModal: () => void;
 };
 
-const FeedbackModal = ({ PackageId, FeedbackUpdateProp, HandleAfterCloseModal }: FeedbackModalTypes, ref: any) => {
-  const userProfileState = useSelector((selector: RootState) => selector.userProfile.profile);
+const FeedbackModal = (
+  { PackageId, FeedbackUpdateProp, HandleAfterCloseModal }: FeedbackModalTypes,
+  ref: any
+) => {
+  const userProfileState = useSelector(
+    (selector: RootState) => selector.userProfile.profile
+  );
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [form] = Form.useForm();
-  const { isPending: isPendingCreateFeedback, mutate: createFeedback } = useMutation({
-    mutationFn: FeedbackAPI.CreateFeedback,
-    mutationKey: ["feedback-api"],
-    onError: (errorResponse: any) => {
-      message.error(errorResponse.response.data.message);
-    },
-    onSuccess: () => {
-      message.success("Thêm nhận xét cho gói thành công");
-      HandleAfterCloseModal();
-      onCloseModal();
-    },
-  });
+  const { isLoading: isLoadingCreateFeedback, mutate: createFeedback } =
+    useMutation({
+      mutationFn: FeedbackAPI.CreateFeedback,
+      mutationKey: ["feedback-api"],
+      onError: (errorResponse: any) => {
+        message.error(errorResponse.response.data.message);
+      },
+      onSuccess: () => {
+        message.success("Thêm nhận xét cho gói thành công");
+        HandleAfterCloseModal();
+        onCloseModal();
+      },
+    });
 
-  const { isPending: isPendingUpdateFeedback, mutate: updateFeedBack } = useMutation({
-    mutationFn: FeedbackAPI.UpdateFeedback,
-    mutationKey: ["feedback-api"],
-    onError: (errorResponse) => {
-      onHandleErrorAPIResponse(errorResponse);
-    },
-    onSuccess: () => {
-      message.success("Cập nhật nhận xét thành công");
-      HandleAfterCloseModal();
-      onCloseModal();
-    },
-  });
+  const { isLoading: isLoadingUpdateFeedback, mutate: updateFeedBack } =
+    useMutation({
+      mutationFn: FeedbackAPI.UpdateFeedback,
+      mutationKey: ["feedback-api"],
+      onError: (errorResponse) => {
+        onHandleErrorAPIResponse(errorResponse);
+      },
+      onSuccess: () => {
+        message.success("Cập nhật nhận xét thành công");
+        HandleAfterCloseModal();
+        onCloseModal();
+      },
+    });
 
   useEffect(() => {
     if (FeedbackUpdateProp) {
@@ -88,7 +110,13 @@ const FeedbackModal = ({ PackageId, FeedbackUpdateProp, HandleAfterCloseModal }:
   };
 
   return (
-    <Modal open={isOpenModal} title="Nhận xét" onCancel={onCloseModal} closeIcon footer>
+    <Modal
+      open={isOpenModal}
+      title="Nhận xét"
+      onCancel={onCloseModal}
+      closeIcon
+      footer
+    >
       <Form form={form} onFinish={onSubmitFeedback}>
         <Row>
           <Col span={24}>
@@ -116,7 +144,11 @@ const FeedbackModal = ({ PackageId, FeedbackUpdateProp, HandleAfterCloseModal }:
           <Col span={24}>
             <Flex align="center" justify="end" gap="middle">
               <Button onClick={onCloseModal}>Đóng cửa sổ</Button>
-              <Button type="primary" loading={isPendingCreateFeedback || isPendingUpdateFeedback} htmlType="submit">
+              <Button
+                type="primary"
+                loading={isLoadingCreateFeedback || isLoadingUpdateFeedback}
+                htmlType="submit"
+              >
                 {FeedbackUpdateProp ? "Cập nhật nhận xét" : "Nhận xét"}
               </Button>
             </Flex>

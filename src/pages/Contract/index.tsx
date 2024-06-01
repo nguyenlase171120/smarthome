@@ -1,5 +1,16 @@
 import { useMutation } from "@tanstack/react-query";
-import { Button, Card, Descriptions, Empty, Flex, Grid, Input, Skeleton, Spin, Tag } from "antd";
+import {
+  Button,
+  Card,
+  Descriptions,
+  Empty,
+  Flex,
+  Grid,
+  Input,
+  Skeleton,
+  Spin,
+  Tag,
+} from "antd";
 import ContractAPI from "../../api/Contract";
 import { onHandleErrorAPIResponse } from "../../utils/helper";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
@@ -15,12 +26,14 @@ import PaymentAPI, { ZaloPaymentTypes } from "../../api/Payment";
 
 const CustomerContract = () => {
   const [contracts, setContracts] = useState<ContractItemTypes[]>([]);
-  const userProfileState = useSelector((selector: RootState) => selector.userProfile.profile);
+  const userProfileState = useSelector(
+    (selector: RootState) => selector.userProfile.profile
+  );
   const contractRequirementRef = useRef<any>();
   const contractPaymentRef = useRef<any>();
 
   const {
-    isPending: isPendingContractList,
+    isLoading: isLoadingContractList,
     data,
     mutate: mutateContracts,
   } = useMutation({
@@ -33,13 +46,14 @@ const CustomerContract = () => {
     },
   });
 
-  const { mutate: createPaymentLinkMutate, isPending: isPendingPayment } = useMutation({
-    mutationFn: PaymentAPI.getZaloPayment,
-    onError: (error) => onHandleErrorAPIResponse(error),
-    onSuccess: (res: any) => {
-      contractPaymentRef.current.openModal(res.order_url);
-    },
-  });
+  const { mutate: createPaymentLinkMutate, isLoading: isLoadingPayment } =
+    useMutation({
+      mutationFn: PaymentAPI.getZaloPayment,
+      onError: (error) => onHandleErrorAPIResponse(error),
+      onSuccess: (res: any) => {
+        contractPaymentRef.current.openModal(res.order_url);
+      },
+    });
 
   useEffect(() => {
     mutateContracts({
@@ -53,21 +67,27 @@ const CustomerContract = () => {
   const onSearchContract = (event: ChangeEvent<HTMLInputElement>) => {
     const keyword = event.target.value.toLowerCase();
     if (data) {
-      const result = data.data.filter((item: ContractItemTypes) => item.title.toLowerCase().includes(keyword));
+      const result = data.data.filter((item: ContractItemTypes) =>
+        item.title.toLowerCase().includes(keyword)
+      );
       setContracts(result);
     }
   };
 
-  const onOpenContractRequest = (contractId: string) => contractRequirementRef.current.openModal(contractId);
+  const onOpenContractRequest = (contractId: string) =>
+    contractRequirementRef.current.openModal(contractId);
 
-  const onCreatePaymentLink = (contractId: string, contractType: ZaloPaymentTypes) => {
+  const onCreatePaymentLink = (
+    contractId: string,
+    contractType: ZaloPaymentTypes
+  ) => {
     createPaymentLinkMutate({
       contractId,
       typePayment: contractType,
     });
   };
 
-  if (isPendingContractList) {
+  if (isLoadingContractList) {
     return (
       <Flex justify="center" align="center" style={{ height: "70vh" }}>
         <Spin size="large" />
@@ -79,7 +99,10 @@ const CustomerContract = () => {
     <Flex vertical gap="middle">
       <ContractRequirementDialog ref={contractRequirementRef} />
       <PaymentRequestDialog ref={contractPaymentRef} />
-      <Input.Search placeholder="Tìm kiếm hợp đồng" onChange={_.debounce(onSearchContract, 500)} />
+      <Input.Search
+        placeholder="Tìm kiếm hợp đồng"
+        onChange={_.debounce(onSearchContract, 500)}
+      />
       {contracts.map((contract: ContractItemTypes) => {
         return (
           <Card
@@ -96,11 +119,15 @@ const CustomerContract = () => {
                   { label: "Mô tả", children: contract.description },
                   {
                     label: "Ngày bắt đầu",
-                    children: dayjs(contract.startPlanDate).format(DateTimeFormat.DATE_FORMAT),
+                    children: dayjs(contract.startPlanDate).format(
+                      DateTimeFormat.DATE_FORMAT
+                    ),
                   },
                   {
                     label: "Ngày kết thúc",
-                    children: dayjs(contract.endPlanDate).format(DateTimeFormat.DATE_FORMAT),
+                    children: dayjs(contract.endPlanDate).format(
+                      DateTimeFormat.DATE_FORMAT
+                    ),
                   },
                   {
                     label: "Tiền gửi",
@@ -108,7 +135,9 @@ const CustomerContract = () => {
                   },
                   {
                     label: "Tổng tiền",
-                    children: <Tag color="green">{contract.totalAmount.toFixed(2)}</Tag>,
+                    children: (
+                      <Tag color="green">{contract.totalAmount.toFixed(2)}</Tag>
+                    ),
                   },
                   {
                     label: "Trạng thái",
@@ -130,16 +159,34 @@ const CustomerContract = () => {
                           size="small"
                           onClick={() => onOpenContractRequest(contract.id)}
                           type="primary"
-                          disabled={![ContractStatusEnum.PENDiNG_DEPOSIT, ContractStatusEnum.DEPOSIT_PAID].includes(contract.status as ContractStatusEnum)}
+                          disabled={
+                            ![
+                              ContractStatusEnum.PENDiNG_DEPOSIT,
+                              ContractStatusEnum.DEPOSIT_PAID,
+                            ].includes(contract.status as ContractStatusEnum)
+                          }
                         >
                           Yêu cầu
                         </Button>
                         <Button
-                          onClick={() => onCreatePaymentLink(contract.id, contract.status === ContractStatusEnum.PENDiNG_DEPOSIT ? ZaloPaymentTypes.Deposit : ZaloPaymentTypes.Completion)}
+                          onClick={() =>
+                            onCreatePaymentLink(
+                              contract.id,
+                              contract.status ===
+                                ContractStatusEnum.PENDiNG_DEPOSIT
+                                ? ZaloPaymentTypes.Deposit
+                                : ZaloPaymentTypes.Completion
+                            )
+                          }
                           size="small"
                           type="primary"
-                          loading={isPendingPayment}
-                          disabled={![ContractStatusEnum.PENDiNG_DEPOSIT, ContractStatusEnum.WAIT_FOR_PAID].includes(contract.status as ContractStatusEnum)}
+                          loading={isLoadingPayment}
+                          disabled={
+                            ![
+                              ContractStatusEnum.PENDiNG_DEPOSIT,
+                              ContractStatusEnum.WAIT_FOR_PAID,
+                            ].includes(contract.status as ContractStatusEnum)
+                          }
                         >
                           Thanh toán
                         </Button>

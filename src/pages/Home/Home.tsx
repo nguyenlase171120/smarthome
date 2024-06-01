@@ -12,7 +12,7 @@ const Home: React.FC = () => {
   const [packages, setPackages] = useState<DevicePackageTypes[]>([]);
 
   const {
-    isPending: isDevicePackagesLoading,
+    isLoading: isDevicePackagesLoading,
     mutate: mutateAllDevicePackages,
     data: devicePackages,
   } = useMutation({
@@ -32,7 +32,9 @@ const Home: React.FC = () => {
   const onSearchPackageName = (event: ChangeEvent<HTMLInputElement>) => {
     const keyword = event.target.value.toLowerCase();
     if (devicePackages?.data) {
-      const result = devicePackages.data.filter((item: DevicePackageTypes) => item.name.toLowerCase().includes(keyword));
+      const result = devicePackages.data.filter((item: DevicePackageTypes) =>
+        item.name.toLowerCase().includes(keyword)
+      );
       setPackages(result);
     }
   };
@@ -44,9 +46,15 @@ const Home: React.FC = () => {
   return (
     <div className="home-wrapper">
       <h5>Chào mừng bạn đã trở lại !</h5>
-      <Input.Search style={{ marginBottom: "1rem" }} placeholder="Tìm kiếm..." onChange={debounce(onSearchPackageName, 500)} />
+      <Input.Search
+        style={{ marginBottom: "1rem" }}
+        placeholder="Tìm kiếm..."
+        onChange={debounce(onSearchPackageName, 500)}
+      />
 
-      {packages.length > 0 && <PackageCard lstData={packages} key={devicePackages?.data} />}
+      {packages.length > 0 && (
+        <PackageCard lstData={packages} key={devicePackages?.data} />
+      )}
     </div>
   );
 };

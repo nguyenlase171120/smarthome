@@ -13,7 +13,7 @@ const StaffList = ({}, ref: any) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const dispatch = useDispatch();
 
-  const { isPending: isPendingTellerList, data: tellers } = useQuery({
+  const { isLoading: isLoadingTellerList, data: tellers } = useQuery({
     queryFn: TellerAPI.GetTellerList,
     queryKey: ["staff-list-key"],
   });
@@ -40,16 +40,32 @@ const StaffList = ({}, ref: any) => {
   };
 
   return (
-    <Modal open={isOpenModal} title="Danh sách nhân viên" onCancel={onCloseModal} closeIcon footer>
-      <Spin spinning={isPendingTellerList}>
+    <Modal
+      open={isOpenModal}
+      title="Danh sách nhân viên"
+      onCancel={onCloseModal}
+      closeIcon
+      footer
+    >
+      <Spin spinning={isLoadingTellerList}>
         <List
           pagination={{ position: "bottom", align: "end", pageSize: 5 }}
           dataSource={tellers?.data}
           renderItem={(item: TellerItemTypes) => {
             return (
-              <List.Item key={item.accountId} actions={[<Button icon={<MessageOutlined />} onClick={() => onChattingWithStaff(item)} />]}>
+              <List.Item
+                key={item.accountId}
+                actions={[
+                  <Button
+                    icon={<MessageOutlined />}
+                    onClick={() => onChattingWithStaff(item)}
+                  />,
+                ]}
+              >
                 <List.Item.Meta
-                  avatar={<Avatar src="https://img.freepik.com/premium-vector/bald-empty-face-icon-avatar-vector-illustration_601298-13391.jpg" />}
+                  avatar={
+                    <Avatar src="https://img.freepik.com/premium-vector/bald-empty-face-icon-avatar-vector-illustration_601298-13391.jpg" />
+                  }
                   title={<a href="https://ant.design">{item.fullName}</a>}
                 />
               </List.Item>
