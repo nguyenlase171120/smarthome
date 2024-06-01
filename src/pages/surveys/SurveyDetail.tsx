@@ -22,7 +22,7 @@ const SurveyDetail = ({ surveyItem }: SurveyDetailProps, ref: any) => {
   };
 
   return (
-    <Modal open={isOpenModal} title="Chi tiết khảo sát" onCancel={onCloseModal} closeIcon>
+    <Modal open={isOpenModal} title="Chi tiết khảo sát" onCancel={onCloseModal} closeIcon footer={null}>
       <Tabs
         items={[
           {

@@ -10,15 +10,14 @@ const ContractRequirementDialog = ({}, ref: any) => {
   const [contractRequestId, setContractRequestId] = useState("");
   const contractRequirementRef = useRef<any>();
 
-  const { mutate: createContractMutation, isLoading: isLoadingCreateContract } =
-    useMutation({
-      mutationFn: ContractAPI.createContractModify,
-      onError: (error) => onHandleErrorAPIResponse(error),
-      onSuccess: () => {
-        message.success("Yêu cầu được gửi đi thành công");
-        onCloseModal();
-      },
-    });
+  const { mutate: createContractMutation, isPending: isPendingCreateContract } = useMutation({
+    mutationFn: ContractAPI.createContractModify,
+    onError: (error) => onHandleErrorAPIResponse(error),
+    onSuccess: () => {
+      message.success("Yêu cầu được gửi đi thành công");
+      onCloseModal();
+    },
+  });
 
   useImperativeHandle(ref, () => {
     return {
@@ -42,21 +41,11 @@ const ContractRequirementDialog = ({}, ref: any) => {
   };
 
   return (
-    <Modal
-      open={isOpenModal}
-      title="Yêu cầu hợp đồng"
-      onCancel={onCloseModal}
-      closeIcon
-      footer={null}
-    >
+    <Modal open={isOpenModal} title="Yêu cầu hợp đồng" onCancel={onCloseModal} closeIcon footer={null}>
       <Form layout="vertical" onFinish={onSubmitForm} style={{ width: "100%" }}>
         <Row gutter={[14, 14]}>
           <Col span={24}>
-            <Form.Item
-              name={"type"}
-              label="Loại yêu cầu"
-              rules={[{ required: true, message: "Yêu cầu chọn loại yêu cầu" }]}
-            >
+            <Form.Item name={"type"} label="Loại yêu cầu" rules={[{ required: true, message: "Yêu cầu chọn loại yêu cầu" }]}>
               <Select
                 options={[
                   {
@@ -73,21 +62,12 @@ const ContractRequirementDialog = ({}, ref: any) => {
           </Col>
 
           <Col span={24}>
-            <Form.Item
-              name="description"
-              label="Mô tả"
-              rules={[{ required: true, message: "Yêu cầu nhập mô tả" }]}
-            >
+            <Form.Item name="description" label="Mô tả" rules={[{ required: true, message: "Yêu cầu nhập mô tả" }]}>
               <Input.TextArea rows={3} />
             </Form.Item>
           </Col>
 
-          <Button
-            type="primary"
-            style={{ width: "100%" }}
-            htmlType="submit"
-            loading={isLoadingCreateContract}
-          >
+          <Button type="primary" style={{ width: "100%" }} htmlType="submit" loading={isPendingCreateContract}>
             Gửi yêu cầu
           </Button>
         </Row>
