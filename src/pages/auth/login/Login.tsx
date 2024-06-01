@@ -1,17 +1,15 @@
 import { IonContent, IonFooter, IonPage } from "@ionic/react";
-import { Button, Form, Input, Row, Skeleton, Typography, message } from "antd";
+import { Button, Form, Input, Row, Spin, Typography } from "antd";
 import { Link, useHistory } from "react-router-dom";
 import Heading from "../../../components/heading/Heading";
 import "./Login.css";
 import { LoginAccountTypes } from "../../../api/Authentication/type";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import AuthenticationAPI from "../../../api/Authentication";
 import { onHandleErrorAPIResponse } from "../../../utils/helper";
 import { END_POINTS } from "../../../utils/constant";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUserProfile } from "../../../redux/userProfileSlice";
-import { UserProfileTypes } from "../../../types";
-import { useEffect } from "react";
 import { RootState } from "../../../redux/store";
 
 const Login: React.FC = () => {
@@ -19,22 +17,20 @@ const Login: React.FC = () => {
   const dispatch = useDispatch();
   const userProfileState = useSelector((selector: RootState) => selector.userProfile.profile);
 
-  // console.log(userProfileState);
-
-  const {
-    isLoading: isLoadingGetUserProfile,
-    data: userProfileResponse,
-    refetch: getUserProfile,
-  } = useQuery({
-    queryKey: ["user-profile"],
-    queryFn: AuthenticationAPI.GetAccountLogin,
+  const { mutate: getProfileMutate, isPending: isLoadingGetUserProfile } = useMutation({
+    mutationFn: AuthenticationAPI.GetAccountLogin,
+    onError: (error) => onHandleErrorAPIResponse(error),
+    onSuccess: (result: any) => {
+      dispatch(updateUserProfile(result));
+      result.status.toLowerCase() === "staff" ? history.replace(END_POINTS.STAFF_ROLE.SURVEY_REPORT) : history.replace(END_POINTS.CUSTOMER_ROLE.HOME);
+    },
   });
 
   const { mutate: mutateLoginAccount, isPending: isLoadingLoginAccount } = useMutation({
     mutationFn: AuthenticationAPI.LoginAccount,
     onSuccess: (response: any) => {
       localStorage.setItem("accessToken", response.accessToken);
-      getUserProfile();
+      getProfileMutate();
     },
     onError: (errorResponse) => {
       onHandleErrorAPIResponse(errorResponse);
@@ -45,18 +41,8 @@ const Login: React.FC = () => {
     mutateLoginAccount(values);
   };
 
-  useEffect(() => {
-    const userProfileResult: UserProfileTypes = userProfileResponse as any;
-    console.log(userProfileResult);
-
-    if (userProfileResult && !userProfileState.id) {
-      dispatch(updateUserProfile(userProfileResult));
-      userProfileResult.status.toLowerCase() === "staff" ? history.replace(END_POINTS.STAFF_ROLE.SURVEY_REPORT) : history.replace(END_POINTS.CUSTOMER_ROLE.HOME);
-    }
-  }, [userProfileResponse]);
-
   if (isLoadingGetUserProfile) {
-    return <Skeleton />;
+    return <Spin size="large" />;
   }
 
   return (
