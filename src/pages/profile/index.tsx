@@ -6,9 +6,7 @@ import { useHistory } from "react-router";
 import { END_POINTS } from "../../utils/constant";
 
 const UserProfile = () => {
-  const userProfileState = useSelector(
-    (selector: RootState) => selector.userProfile.profile
-  );
+  const userProfileState = useSelector((selector: RootState) => selector.userProfile.profile);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -50,38 +48,6 @@ const UserProfile = () => {
       <Button block type="primary" onClick={onHandleLogout}>
         Đăng xuất
       </Button>
-
-      {/* <Flex vertical gap={10}>
-        {USER_PROFILE_LIST.priority.map((item) => {
-          return (
-            <Flex gap={10} style={{ cursor: "pointer" }}>
-              {item.icon}
-              <Typography>{item.text}</Typography>
-            </Flex>
-          );
-        })}
-        <Divider style={{ margin: 0 }} />
-
-        {USER_PROFILE_LIST.external.map((item) => {
-          return (
-            <Flex gap={10} style={{ cursor: "pointer" }}>
-              {item.icon}
-              <Typography>{item.text}</Typography>
-            </Flex>
-          );
-        })}
-
-        <Divider style={{ margin: 0 }} />
-
-        {USER_PROFILE_LIST.personal.map((item) => {
-          return (
-            <Flex gap={10} style={{ cursor: "pointer" }}>
-              {item.icon}
-              <Typography>{item.text}</Typography>
-            </Flex>
-          );
-        })}
-      </Flex> */}
     </Flex>
   );
 };

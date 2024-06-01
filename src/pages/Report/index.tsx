@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { Avatar, Button, Card, Flex, Input, Select, Skeleton, Tag, Typography, message } from "antd";
+import { Avatar, Button, Card, Flex, Input, Select, Skeleton, Spin, Tag, Typography, message } from "antd";
 import SurveyReportAPI from "../../api/SurveyReport";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import "./style.css";
@@ -40,7 +40,11 @@ const SurveyReports = () => {
   }, [surveyFilter]);
 
   if (isPendingSurveyList) {
-    return <Skeleton />;
+    return (
+      <Flex align="center" justify="center" style={{ minHeight: "50vh" }}>
+        <Spin />
+      </Flex>
+    );
   }
 
   const onGetStatusColor = (status: string) => {

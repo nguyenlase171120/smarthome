@@ -8,23 +8,26 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import AuthenticationAPI from "../../../api/Authentication";
 import { onHandleErrorAPIResponse } from "../../../utils/helper";
 import { END_POINTS } from "../../../utils/constant";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateUserProfile } from "../../../redux/userProfileSlice";
 import { UserProfileTypes } from "../../../types";
+import { useEffect } from "react";
+import { RootState } from "../../../redux/store";
 
 const Login: React.FC = () => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const userProfileState = useSelector((selector: RootState) => selector.userProfile.profile);
+
+  // console.log(userProfileState);
 
   const {
     isLoading: isLoadingGetUserProfile,
     data: userProfileResponse,
     refetch: getUserProfile,
-    isSuccess,
   } = useQuery({
     queryKey: ["user-profile"],
     queryFn: AuthenticationAPI.GetAccountLogin,
-    enabled: false,
   });
 
   const { mutate: mutateLoginAccount, isPending: isLoadingLoginAccount } = useMutation({
@@ -42,20 +45,18 @@ const Login: React.FC = () => {
     mutateLoginAccount(values);
   };
 
+  useEffect(() => {
+    const userProfileResult: UserProfileTypes = userProfileResponse as any;
+    console.log(userProfileResult);
+
+    if (userProfileResult && !userProfileState.id) {
+      dispatch(updateUserProfile(userProfileResult));
+      userProfileResult.status.toLowerCase() === "staff" ? history.replace(END_POINTS.STAFF_ROLE.SURVEY_REPORT) : history.replace(END_POINTS.CUSTOMER_ROLE.HOME);
+    }
+  }, [userProfileResponse]);
+
   if (isLoadingGetUserProfile) {
     return <Skeleton />;
-  }
-
-  const newUser: UserProfileTypes = userProfileResponse as any;
-
-  if (newUser?.email && isSuccess) {
-    dispatch(updateUserProfile(userProfileResponse as any));
-
-    if (newUser.status.toLowerCase() === "staff") {
-      history.replace(END_POINTS.STAFF_ROLE.SURVEY_REPORT);
-    } else {
-      history.replace(END_POINTS.CUSTOMER_ROLE.HOME);
-    }
   }
 
   return (
