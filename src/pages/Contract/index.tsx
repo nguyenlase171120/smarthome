@@ -67,88 +67,89 @@ const CustomerContract = () => {
     });
   };
 
+  if (isLoadingContractList || isLoadingPayment) {
+    return <Spin />;
+  }
+
   return (
-    <Spin spinning={isLoadingContractList || isLoadingPayment}>
+    <Flex vertical gap="middle">
       <ContractRequirementDialog ref={contractRequirementRef} />
       <PaymentRequestDialog ref={contractPaymentRef} />
+      <Input.Search placeholder="Tìm kiếm hợp đồng" onChange={_.debounce(onSearchContract, 500)} />
+      {contracts.map((contract: ContractItemTypes) => {
+        return (
+          <Card
+            key={contract.id}
+            title={contract.title}
+            style={{
+              border: "1px solid #000",
+              borderRadius: "1rem",
+            }}
+          >
+            <Flex vertical gap="middle">
+              <Descriptions
+                items={[
+                  { label: "Mô tả", children: contract.description },
+                  {
+                    label: "Ngày bắt đầu",
+                    children: dayjs(contract.startPlanDate).format(DateTimeFormat.DATE_FORMAT),
+                  },
+                  {
+                    label: "Ngày kết thúc",
+                    children: dayjs(contract.endPlanDate).format(DateTimeFormat.DATE_FORMAT),
+                  },
+                  {
+                    label: "Tiền gửi",
+                    children: contract.deposit,
+                  },
+                  {
+                    label: "Tổng tiền",
+                    children: <Tag color="green">{contract.totalAmount.toFixed(2)}</Tag>,
+                  },
+                  {
+                    label: "Trạng thái",
+                    children: <Tag color="geekblue">{contract.status}</Tag>,
+                  },
+                  {
+                    label: "Người lắp đặt",
+                    children: contract.staff.fullName,
+                  },
+                  {
+                    label: "Nguồi tư vấn",
+                    children: contract.teller.fullName,
+                  },
+                  {
+                    label: "Chức năng",
+                    children: (
+                      <Flex gap={12}>
+                        <Button
+                          size="small"
+                          onClick={() => onOpenContractRequest(contract.id)}
+                          type="primary"
+                          disabled={![ContractStatusEnum.PENDiNG_DEPOSIT, ContractStatusEnum.DEPOSIT_PAID].includes(contract.status as ContractStatusEnum)}
+                        >
+                          Yêu cầu
+                        </Button>
+                        <Button
+                          onClick={() => onCreatePaymentLink(contract.id, contract.status === ContractStatusEnum.PENDiNG_DEPOSIT ? ZaloPaymentTypes.Deposit : ZaloPaymentTypes.Completion)}
+                          size="small"
+                          type="primary"
+                          disabled={![ContractStatusEnum.PENDiNG_DEPOSIT, ContractStatusEnum.WAIT_FOR_PAID].includes(contract.status as ContractStatusEnum)}
+                        >
+                          Thanh toán
+                        </Button>
+                      </Flex>
+                    ),
+                  },
+                ]}
+              />
+            </Flex>
+          </Card>
+        );
+      })}
 
-      <Flex vertical gap="middle">
-        <Input.Search placeholder="Tìm kiếm hợp đồng" onChange={_.debounce(onSearchContract, 500)} />
-        {contracts.map((contract: ContractItemTypes) => {
-          return (
-            <Card
-              key={contract.id}
-              title={contract.title}
-              style={{
-                border: "1px solid #000",
-                borderRadius: "1rem",
-              }}
-            >
-              <Flex vertical gap="middle">
-                <Descriptions
-                  items={[
-                    { label: "Mô tả", children: contract.description },
-                    {
-                      label: "Ngày bắt đầu",
-                      children: dayjs(contract.startPlanDate).format(DateTimeFormat.DATE_FORMAT),
-                    },
-                    {
-                      label: "Ngày kết thúc",
-                      children: dayjs(contract.endPlanDate).format(DateTimeFormat.DATE_FORMAT),
-                    },
-                    {
-                      label: "Tiền gửi",
-                      children: contract.deposit,
-                    },
-                    {
-                      label: "Tổng tiền",
-                      children: <Tag color="green">{contract.totalAmount.toFixed(2)}</Tag>,
-                    },
-                    {
-                      label: "Trạng thái",
-                      children: <Tag color="geekblue">{contract.status}</Tag>,
-                    },
-                    {
-                      label: "Người lắp đặt",
-                      children: contract.staff.fullName,
-                    },
-                    {
-                      label: "Nguồi tư vấn",
-                      children: contract.teller.fullName,
-                    },
-                    {
-                      label: "Chức năng",
-                      children: (
-                        <Flex gap={12}>
-                          <Button
-                            size="small"
-                            onClick={() => onOpenContractRequest(contract.id)}
-                            type="primary"
-                            disabled={![ContractStatusEnum.PENDiNG_DEPOSIT, ContractStatusEnum.DEPOSIT_PAID].includes(contract.status as ContractStatusEnum)}
-                          >
-                            Yêu cầu
-                          </Button>
-                          <Button
-                            onClick={() => onCreatePaymentLink(contract.id, contract.status === ContractStatusEnum.PENDiNG_DEPOSIT ? ZaloPaymentTypes.Deposit : ZaloPaymentTypes.Completion)}
-                            size="small"
-                            type="primary"
-                            disabled={![ContractStatusEnum.PENDiNG_DEPOSIT, ContractStatusEnum.WAIT_FOR_PAID].includes(contract.status as ContractStatusEnum)}
-                          >
-                            Thanh toán
-                          </Button>
-                        </Flex>
-                      ),
-                    },
-                  ]}
-                />
-              </Flex>
-            </Card>
-          );
-        })}
-
-        {!contracts.length && <Empty />}
-      </Flex>
-    </Spin>
+      {!contracts.length && <Empty />}
+    </Flex>
   );
 };
 
