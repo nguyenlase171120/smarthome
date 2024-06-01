@@ -295,11 +295,29 @@ const StaffContract = () => {
                     </Col>
                   </Row>
 
-                  {[ContractStatusEnum.PENDiNG_DEPOSIT, ContractStatusEnum.DEPOSIT_PAID].includes(contractItem.status as ContractStatusEnum) && (
-                    <Button type="primary" onClick={() => onOpenContractRequest(contractItem.id)}>
-                      Yêu cầu hợp đồng
-                    </Button>
-                  )}
+                  {/* <Row gutter={[14, 14]}>
+                    <Col span={12}>
+                      <Button
+                        type="primary"
+                        onClick={() => onOpenContractRequest(contractItem.id)}
+                        style={{ width: "100%" }}
+                        disabled={![ContractStatusEnum.PENDiNG_DEPOSIT, ContractStatusEnum.DEPOSIT_PAID].includes(contractItem.status as ContractStatusEnum)}
+                      >
+                        Yêu cầu hợp đồng
+                      </Button>
+                    </Col>
+
+                    <Col span={12}>
+                      <Button
+                        type="primary"
+                        onClick={() => onOpenContractRequest(contractItem.id)}
+                        style={{ width: "100%" }}
+                        disabled={![ContractStatusEnum.PENDiNG_DEPOSIT, ContractStatusEnum.WAIT_FOR_PAID].includes(contractItem.status as ContractStatusEnum)}
+                      >
+                        Thanh toán
+                      </Button>
+                    </Col>
+                  </Row> */}
                 </Flex>
               </Card>
             );

@@ -1,5 +1,5 @@
 import { Button, Col, Form, Input, Modal, Row, Select, message } from "antd";
-import { forwardRef, useImperativeHandle, useState } from "react";
+import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import { CreateContractModifyRequest } from "../../api/Contract/type";
 import { useMutation } from "@tanstack/react-query";
 import ContractAPI from "../../api/Contract";
@@ -8,6 +8,7 @@ import { onHandleErrorAPIResponse } from "../../utils/helper";
 const ContractRequirementDialog = ({}, ref: any) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [contractRequestId, setContractRequestId] = useState("");
+  const contractRequirementRef = useRef<any>();
 
   const { mutate: createContractMutation, isPending: isLoadingCreateContract } = useMutation({
     mutationFn: ContractAPI.createContractModify,

@@ -41,6 +41,9 @@ export const END_POINTS_API = {
   SURVEY_REPORT: "/api/survey-reports",
   CONTRACT_IMAGE: "/api/contracts/upload-image",
   CONTRACT_ACCEPTANCE: "/api/contracts/upload-acceptance",
+  DEVICE_TOKENS: "/api/device-tokens",
+  NOTIFICATIONS: "/api/notifications",
+  ZALO_PAY: "/api/payments/zalo-pay",
 };
 
 export const ROUTES_NON_FOOTER_HEADER = [
