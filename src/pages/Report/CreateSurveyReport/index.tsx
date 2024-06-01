@@ -45,7 +45,7 @@ const CreateSurveyReportModal = (
     []
   );
 
-  const { isPending: isPendingCreateReport, mutate: createSurveyReport } =
+  const { isLoading: isLoadingCreateReport, mutate: createSurveyReport } =
     useMutation({
       mutationFn: SurveyReportAPI.CreateSurveyReport,
       mutationKey: ["survey-report-key"],
@@ -63,7 +63,7 @@ const CreateSurveyReportModal = (
     });
 
   const {
-    isPending: isDevicePackagesLoading,
+    isLoading: isDevicePackagesLoading,
     mutate: mutateAllDevicePackages,
   } = useMutation({
     mutationFn: DevicePackagesAPI.getAllDevicePackages,
@@ -82,7 +82,7 @@ const CreateSurveyReportModal = (
     },
   });
 
-  const { isPending: isPendingSurveyList, mutate: getSurveyList } = useMutation(
+  const { isLoading: isLoadingSurveyList, mutate: getSurveyList } = useMutation(
     {
       mutationFn: SurveyRequestAPI.GetSurveyList,
       onError: (error) => {
@@ -100,7 +100,7 @@ const CreateSurveyReportModal = (
     }
   );
 
-  const { isPending: isPendingUpdateSurveyReport, mutate: updateSurveyReport } =
+  const { isLoading: isLoadingUpdateSurveyReport, mutate: updateSurveyReport } =
     useMutation({
       mutationFn: SurveyReportAPI.UpdateSurveyReport,
       onError: (error) => {
@@ -157,7 +157,7 @@ const CreateSurveyReportModal = (
     }
   };
 
-  if (isDevicePackagesLoading || isPendingSurveyList) {
+  if (isDevicePackagesLoading || isLoadingSurveyList) {
     return <Skeleton paragraph />;
   }
 
@@ -223,7 +223,7 @@ const CreateSurveyReportModal = (
               <Button
                 htmlType="submit"
                 type="primary"
-                loading={isPendingCreateReport || isPendingUpdateSurveyReport}
+                loading={isLoadingCreateReport || isLoadingUpdateSurveyReport}
               >
                 Xác nhận
               </Button>

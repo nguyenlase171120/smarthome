@@ -1,5 +1,17 @@
 import { useMutation } from "@tanstack/react-query";
-import { Avatar, Button, Card, Flex, Input, Select, Skeleton, Spin, Tag, Typography, message } from "antd";
+import {
+  Avatar,
+  Button,
+  Card,
+  Flex,
+  Input,
+  Select,
+  Skeleton,
+  Spin,
+  Tag,
+  Typography,
+  message,
+} from "antd";
 import SurveyReportAPI from "../../api/SurveyReport";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import "./style.css";
@@ -21,7 +33,7 @@ const SurveyReports = () => {
     status: SurveyStatusEnum.ALL,
   });
   const {
-    isPending: isPendingSurveyList,
+    isLoading: isLoadingSurveyList,
     mutate: getSurveyReports,
     data: surveyReportsList,
   } = useMutation({
@@ -39,7 +51,7 @@ const SurveyReports = () => {
     getSurveyReports(surveyFilter as QuerySurveyReportParams);
   }, [surveyFilter]);
 
-  if (isPendingSurveyList) {
+  if (isLoadingSurveyList) {
     return (
       <Flex align="center" justify="center" style={{ minHeight: "50vh" }}>
         <Spin />
@@ -82,7 +94,9 @@ const SurveyReports = () => {
     const value = event.target.value.toLowerCase();
 
     if (surveyReportsList) {
-      const result = surveyReportsList.data.filter((item: any) => item.recommendDevicePackage.name.toLowerCase().includes(value));
+      const result = surveyReportsList.data.filter((item: any) =>
+        item.recommendDevicePackage.name.toLowerCase().includes(value)
+      );
 
       setSurveyReports(result);
     }
@@ -104,7 +118,10 @@ const SurveyReports = () => {
       />
 
       <Flex align="center" gap="middle">
-        <Input.Search placeholder="Tìm tên báo cáo" onChange={debounce(onSearchSurveyName, 500)} />
+        <Input.Search
+          placeholder="Tìm tên báo cáo"
+          onChange={debounce(onSearchSurveyName, 500)}
+        />
         <Select
           placeholder="Trạng thái"
           onChange={(event) => onFilterSurveyStatus(event)}
@@ -144,17 +161,31 @@ const SurveyReports = () => {
               <Card size="small" key={item.id}>
                 <Flex vertical gap={4} flex={1}>
                   <Flex justify="space-between" gap="middle">
-                    <div className="survey-title">{item.recommendDevicePackage.name}</div>
+                    <div className="survey-title">
+                      {item.recommendDevicePackage.name}
+                    </div>
 
-                    {item.status === SurveyStatusEnum.INPROGESS && <Button icon={<EditOutlined />} type="text" onClick={() => onUpdateSurveyReport(item)} />}
+                    {item.status === SurveyStatusEnum.INPROGESS && (
+                      <Button
+                        icon={<EditOutlined />}
+                        type="text"
+                        onClick={() => onUpdateSurveyReport(item)}
+                      />
+                    )}
                   </Flex>
 
                   <Flex justify="space-between" align="center" gap="middle">
-                    <div className="customer-name">{item.surveyRequest.customer.fullName}</div>
+                    <div className="customer-name">
+                      {item.surveyRequest.customer.fullName}
+                    </div>
 
-                    <Tag color={onGetStatusColor(item.status)}>{item.status}</Tag>
+                    <Tag color={onGetStatusColor(item.status)}>
+                      {item.status}
+                    </Tag>
                   </Flex>
-                  <div className="customer-name">{dayjs(item.appointmentDate).format("MM/DD/YYYY HH:mm")}</div>
+                  <div className="customer-name">
+                    {dayjs(item.appointmentDate).format("MM/DD/YYYY HH:mm")}
+                  </div>
                 </Flex>
               </Card>
             );
