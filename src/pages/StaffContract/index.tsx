@@ -38,7 +38,9 @@ const StaffContract = () => {
     (selector: RootState) => selector.userProfile.profile
   );
   const contractRequirementRef = useRef<any>();
+
   const [contractId, setContractId] = useState<string>("");
+  const [fileAcceptance, setFileAcceptance] = useState<File>();
 
   const { isLoading: isLoadingUploadImage, mutate: mutateUploadContractImage } =
     useMutation({
@@ -64,7 +66,10 @@ const StaffContract = () => {
     },
     onSuccess: () => {
       message.success("Tải hình ảnh nghiệm thu thành công");
-      getContractDetailMutate(contractId);
+      mutateContracts({
+        staffId: userProfileState.id,
+        pageSize: 1000,
+      });
     },
   });
 
@@ -129,15 +134,25 @@ const StaffContract = () => {
     useMutation({
       mutationFn: ContractAPI.updateContract,
       mutationKey: [""],
-      onError: (error) => {
-        onHandleErrorAPIResponse(error);
-      },
-      onSuccess: () => {
-        message.success("Cập nhật trạng thái hợp đồng thành công"),
-          mutateContracts({
-            staffId: userProfileState.id,
-            pageSize: 1000,
+
+      onSuccess: (res) => {
+        const response: ContractItemTypes = res;
+
+        message.success("Cập nhật trạng thái hợp đồng thành công");
+
+        if (response.status === ContractStatusEnum.WAIT_FOR_PAID) {
+          const formData = new FormData();
+          formData.append("image", fileAcceptance as Blob);
+          return mutateUploadAcceptanceImage({
+            formData,
+            id: contractId,
           });
+        }
+
+        mutateContracts({
+          staffId: userProfileState.id,
+          pageSize: 1000,
+        });
       },
     });
 
@@ -218,12 +233,39 @@ const StaffContract = () => {
     setContractId(contractId);
     if (e.target.files && e.target.files.length > 0) {
       const selectedImage = e.target.files[0];
-      const formData = new FormData();
-      formData.append("image", selectedImage);
+      setFileAcceptance(selectedImage);
 
-      mutateUploadAcceptanceImage({
-        formData,
-        id: contractId,
+      getContractDetailMutate(contractId, {
+        onSuccess: (result) => {
+          const response: ContractItemTypes = result;
+
+          const convertContractDetails = response.contractDetails.map(
+            (contract) => {
+              return {
+                smartDeviceId: contract.smartDeviceId,
+                quantity: contract.quantity,
+              };
+            }
+          );
+          const convertDevicePackages = response.devicePackageUsages.map(
+            (item) => item.devicePackageId
+          );
+
+          onUpdateContractStatus(
+            {
+              contractDetails: convertContractDetails,
+              description: response.description,
+              devicePackages: convertDevicePackages,
+              id: response.id,
+              staffId: response.staff.accountId,
+              status: response.status,
+              title: response.title,
+            },
+            response.status === ContractStatusEnum.DEPOSIT_PAID
+              ? ContractStatusEnum.IN_PROGRESS
+              : ContractStatusEnum.WAIT_FOR_PAID
+          );
+        },
       });
     }
   };

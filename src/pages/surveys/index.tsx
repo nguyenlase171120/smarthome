@@ -87,7 +87,14 @@ const Surveys = () => {
           >
             <List.Item.Meta
               avatar={<Avatar shape="square" icon={<FileTextOutlined />} />}
-              title={<div> Khảo sát {index + 1} </div>}
+              title={
+                <div>
+                  {" "}
+                  Được tạo ngày : {dayjs(item.surveyDate).format(
+                    "MM/DD/YYYY"
+                  )}{" "}
+                </div>
+              }
               description={
                 <Typography.Text> {item.description}</Typography.Text>
               }
