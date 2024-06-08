@@ -1,8 +1,14 @@
 import { useMutation } from "@tanstack/react-query";
-import { onHandleErrorAPIResponse } from "../../utils/helper";
+import {
+  convertStatusToVN,
+  onHandleErrorAPIResponse,
+} from "../../utils/helper";
 import ContractAPI from "../../api/Contract";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { ContractItemTypes } from "../../api/Contract/type";
+import {
+  ContractItemTypes,
+  UpdateContractTypes,
+} from "../../api/Contract/type";
 import {
   Avatar,
   Button,
@@ -32,6 +38,7 @@ const StaffContract = () => {
     (selector: RootState) => selector.userProfile.profile
   );
   const contractRequirementRef = useRef<any>();
+  const [contractId, setContractId] = useState<string>("");
 
   const { isLoading: isLoadingUploadImage, mutate: mutateUploadContractImage } =
     useMutation({
@@ -42,6 +49,7 @@ const StaffContract = () => {
       },
       onSuccess: () => {
         message.success("Tải hình ảnh hợp đồng thành công");
+        getContractDetailMutate(contractId);
       },
     });
 
@@ -56,7 +64,47 @@ const StaffContract = () => {
     },
     onSuccess: () => {
       message.success("Tải hình ảnh nghiệm thu thành công");
+      getContractDetailMutate(contractId);
     },
+  });
+
+  const {
+    mutate: getContractDetailMutate,
+    isLoading: isLoadingContractDetail,
+  } = useMutation({
+    onSuccess: (result) => {
+      const response: ContractItemTypes = result;
+
+      const convertContractDetails = response.contractDetails.map(
+        (contract) => {
+          return {
+            smartDeviceId: contract.smartDeviceId,
+            quantity: contract.quantity,
+          };
+        }
+      );
+      const convertDevicePackages = response.devicePackageUsages.map(
+        (item) => item.devicePackageId
+      );
+
+      onUpdateContractStatus(
+        {
+          contractDetails: convertContractDetails,
+          description: response.description,
+          devicePackages: convertDevicePackages,
+          id: response.id,
+          staffId: response.staff.accountId,
+          status: response.status,
+          title: response.title,
+        },
+        response.status === ContractStatusEnum.DEPOSIT_PAID
+          ? ContractStatusEnum.IN_PROGRESS
+          : ContractStatusEnum.WAIT_FOR_PAID
+      );
+    },
+    mutationFn: ContractAPI.getContractDetail,
+    mutationKey: [""],
+    onError: (error) => onHandleErrorAPIResponse(error),
   });
 
   const {
@@ -71,7 +119,6 @@ const StaffContract = () => {
     onSuccess: (res) => {
       const result = res.data.filter(
         (contract: ContractItemTypes) =>
-          contract.status !== ContractStatusEnum.PENDiNG_DEPOSIT &&
           contract.status !== ContractStatusEnum.CANCELLED
       );
       setContracts(result);
@@ -133,15 +180,15 @@ const StaffContract = () => {
   };
 
   const onUpdateContractStatus = (
-    contract: ContractItemTypes,
+    contract: UpdateContractTypes,
     status: ContractStatusEnum
   ) => {
     updateContractStatus({
       id: contract.id,
       staffId: userProfileState.id,
-      contractDetails: [],
+      contractDetails: contract.contractDetails,
       description: contract.status,
-      devicePackages: [],
+      devicePackages: contract.devicePackages,
       status,
       title: contract.title,
     });
@@ -151,6 +198,7 @@ const StaffContract = () => {
     e: ChangeEvent<HTMLInputElement>,
     contractId: string
   ) => {
+    setContractId(contractId);
     if (e.target.files && e.target.files.length > 0) {
       const selectedImage = e.target.files[0];
       const formData = new FormData();
@@ -167,6 +215,7 @@ const StaffContract = () => {
     e: ChangeEvent<HTMLInputElement>,
     contractId: string
   ) => {
+    setContractId(contractId);
     if (e.target.files && e.target.files.length > 0) {
       const selectedImage = e.target.files[0];
       const formData = new FormData();
@@ -179,9 +228,6 @@ const StaffContract = () => {
     }
   };
 
-  const onOpenContractRequest = (contractId: string) =>
-    contractRequirementRef.current.openModal(contractId);
-
   return (
     <Flex vertical gap="middle">
       <ContractRequirementDialog ref={contractRequirementRef} />
@@ -191,7 +237,8 @@ const StaffContract = () => {
           isLoadingUploadImage ||
           isLoadingUploadAcceptance ||
           isLoadingContractList ||
-          isLoadingUpdateContract
+          isLoadingUpdateContract ||
+          isLoadingContractDetail
         }
       >
         <Flex gap={5} align="center">
@@ -204,31 +251,31 @@ const StaffContract = () => {
             onChange={(event) => onFilterContractStatus(event)}
             options={[
               {
-                label: "All",
+                label: convertStatusToVN(ContractStatusEnum.ALL),
                 value: "",
               },
               {
-                label: "Pending Deposit",
+                label: convertStatusToVN(ContractStatusEnum.PENDiNG_DEPOSIT),
                 value: ContractStatusEnum.PENDiNG_DEPOSIT,
               },
               {
-                label: "Deposit Paid",
+                label: convertStatusToVN(ContractStatusEnum.DEPOSIT_PAID),
                 value: ContractStatusEnum.DEPOSIT_PAID,
               },
               {
-                label: "Inprogress",
+                label: convertStatusToVN(ContractStatusEnum.IN_PROGRESS),
                 value: ContractStatusEnum.IN_PROGRESS,
               },
               {
-                label: "Wait For Paid",
+                label: convertStatusToVN(ContractStatusEnum.WAIT_FOR_PAID),
                 value: ContractStatusEnum.WAIT_FOR_PAID,
               },
               {
-                label: "Completed",
+                label: convertStatusToVN(ContractStatusEnum.COMPLETED),
                 value: ContractStatusEnum.COMPLETED,
               },
               {
-                label: "Cancelled",
+                label: convertStatusToVN(ContractStatusEnum.CANCELLED),
                 value: ContractStatusEnum.CANCELLED,
               },
             ]}
@@ -248,7 +295,7 @@ const StaffContract = () => {
               >
                 <Flex vertical gap={"middle"}>
                   <Flex justify="space-between" align="center">
-                    <div className="contract-tag">CONTRACT</div>
+                    <div className="contract-tag">Hợp đồng</div>
                     <Flex align="center" gap={5}>
                       <div
                         className="contract-tag"
@@ -273,7 +320,9 @@ const StaffContract = () => {
                         contractItem.status as ContractStatusEnum
                       )}
                     >
-                      {contractItem.status}
+                      {convertStatusToVN(
+                        contractItem.status as ContractStatusEnum
+                      )}
                     </Tag>
                   </Flex>
 
@@ -303,11 +352,25 @@ const StaffContract = () => {
 
                   <Row gutter={[14, 14]}>
                     <Col span={12}>
-                      <label htmlFor="file-upload" className="upload-btn">
+                      <label
+                        htmlFor="file-upload"
+                        className="upload-btn"
+                        style={{
+                          opacity:
+                            contractItem.status !==
+                            ContractStatusEnum.DEPOSIT_PAID
+                              ? 0.5
+                              : 1,
+                        }}
+                      >
                         <UploadOutlined />
                         Hình hợp đồng
                       </label>
                       <input
+                        disabled={
+                          contractItem.status !==
+                          ContractStatusEnum.DEPOSIT_PAID
+                        }
                         style={{ display: "none" }}
                         id="file-upload"
                         type="file"
@@ -321,11 +384,21 @@ const StaffContract = () => {
                       <label
                         htmlFor="file-acceptance-upload"
                         className="upload-btn"
+                        style={{
+                          opacity:
+                            contractItem.status !==
+                            ContractStatusEnum.IN_PROGRESS
+                              ? 0.5
+                              : 1,
+                        }}
                       >
                         <UploadOutlined />
                         Hình nghiệm thu
                       </label>
                       <input
+                        disabled={
+                          contractItem.status !== ContractStatusEnum.IN_PROGRESS
+                        }
                         style={{ display: "none" }}
                         id="file-acceptance-upload"
                         type="file"

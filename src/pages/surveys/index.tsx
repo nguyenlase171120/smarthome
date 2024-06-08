@@ -42,14 +42,12 @@ const Surveys = () => {
     onError: (error) => {
       onHandleErrorAPIResponse(error);
     },
-    onSuccess: (values) => {
-      console.log(values);
-    },
   });
 
   useEffect(() => {
     getSurveyList({
       customerId: userProfileState.id,
+      pageSize: 999,
     });
   }, []);
 
@@ -89,7 +87,7 @@ const Surveys = () => {
           >
             <List.Item.Meta
               avatar={<Avatar shape="square" icon={<FileTextOutlined />} />}
-              title={<a href="#"> Khảo sát {index + 1} </a>}
+              title={<div> Khảo sát {index + 1} </div>}
               description={
                 <Typography.Text> {item.description}</Typography.Text>
               }

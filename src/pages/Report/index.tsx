@@ -21,14 +21,18 @@ import { SurveyStatusEnum } from "../../enums";
 import CreateSurveyReport from "./CreateSurveyReport";
 import { QuerySurveyReportParams } from "../../types/SurveyReport";
 import { debounce } from "lodash";
+import {
+  convertSurveyStatusToVN,
+  onHandleErrorAPIResponse,
+} from "../../utils/helper";
 
 const SurveyReports = () => {
   const [surveyReportUpdate, setSurveyReportUpdate] = useState<any>();
   const [surveyReports, setSurveyReports] = useState<any[]>([]);
   const [surveyFilter, setSurveyFilter] = useState<QuerySurveyReportParams>({
     appointmentDate: "",
-    pageNumber: 1,
-    pageSize: 10,
+    pageNumber: 0,
+    pageSize: 999,
     status: SurveyStatusEnum.ALL,
   });
   const {
@@ -39,7 +43,7 @@ const SurveyReports = () => {
     mutationFn: SurveyReportAPI.GetAllSurvey,
     mutationKey: ["survey-report"],
     onError: (errorResponse) => {
-      message.error(errorResponse.message);
+      onHandleErrorAPIResponse(errorResponse);
     },
     onSuccess: (res) => {
       setSurveyReports(res.data);
@@ -113,23 +117,23 @@ const SurveyReports = () => {
           onChange={(event) => onFilterSurveyStatus(event)}
           options={[
             {
-              label: "All",
+              label: convertSurveyStatusToVN(SurveyStatusEnum.ALL),
               value: "",
             },
             {
-              label: "Completed",
+              label: convertSurveyStatusToVN(SurveyStatusEnum.COMPLETED),
               value: SurveyStatusEnum.COMPLETED,
             },
             {
-              label: "Pending",
+              label: convertSurveyStatusToVN(SurveyStatusEnum.PENDING),
               value: SurveyStatusEnum.PENDING,
             },
             {
-              label: "Inprogress",
+              label: convertSurveyStatusToVN(SurveyStatusEnum.INPROGESS),
               value: SurveyStatusEnum.INPROGESS,
             },
             {
-              label: "Rejected",
+              label: convertSurveyStatusToVN(SurveyStatusEnum.REJECTED),
               value: SurveyStatusEnum.REJECTED,
             },
           ]}
@@ -162,7 +166,7 @@ const SurveyReports = () => {
                     </div>
 
                     <Tag color={onGetStatusColor(item.status)}>
-                      {item.status}
+                      {convertSurveyStatusToVN(item.status)}
                     </Tag>
                   </Flex>
                   <div className="customer-name">

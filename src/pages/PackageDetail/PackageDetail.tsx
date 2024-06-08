@@ -17,7 +17,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import StaffList from "./StaffList";
 
-const PackageDetail: React.FC = () => {
+const PackageDetail = () => {
   const { id }: any = useParams();
   const [packageData, setPackage] = useState<DevicePackageDetailTypes>();
   const surveyModalRef = useRef<any>();

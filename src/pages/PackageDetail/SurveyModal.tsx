@@ -64,10 +64,13 @@ const SurveyModal = ({}, ref: any) => {
             { required: true, message: "Ngày gửi yêu cầu không được trống" },
           ]}
         >
-          <DatePicker style={{ width: "100%" }} />
+          <DatePicker
+            style={{ width: "100%" }}
+            placeholder="Ngày muốn khảo sát"
+          />
         </Form.Item>
         <Form.Item name="description">
-          <Input.TextArea rows={3} placeholder="Description...." />
+          <Input.TextArea rows={3} placeholder="Mô tả" />
         </Form.Item>
 
         <Button

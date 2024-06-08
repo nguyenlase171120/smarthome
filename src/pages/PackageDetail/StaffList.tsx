@@ -66,7 +66,7 @@ const StaffList = ({}, ref: any) => {
                   avatar={
                     <Avatar src="https://img.freepik.com/premium-vector/bald-empty-face-icon-avatar-vector-illustration_601298-13391.jpg" />
                   }
-                  title={<a href="https://ant.design">{item.fullName}</a>}
+                  title={item.fullName}
                 />
               </List.Item>
             );

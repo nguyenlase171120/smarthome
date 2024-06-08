@@ -12,7 +12,10 @@ import {
   Tag,
 } from "antd";
 import ContractAPI from "../../api/Contract";
-import { onHandleErrorAPIResponse } from "../../utils/helper";
+import {
+  convertStatusToVN,
+  onHandleErrorAPIResponse,
+} from "../../utils/helper";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { ContractItemTypes } from "../../api/Contract/type";
 import dayjs from "dayjs";
@@ -23,6 +26,8 @@ import { RootState } from "../../redux/store";
 import ContractRequirementDialog from "../StaffContract/ContractRequirementDialog";
 import PaymentRequestDialog from "../StaffContract/PaymentRequestDialog";
 import PaymentAPI, { ZaloPaymentTypes } from "../../api/Payment";
+import { EyeOutlined } from "@ant-design/icons";
+import ContractDetailDialog from "./ContractDetailDialog";
 
 const CustomerContract = () => {
   const [contracts, setContracts] = useState<ContractItemTypes[]>([]);
@@ -31,6 +36,7 @@ const CustomerContract = () => {
   );
   const contractRequirementRef = useRef<any>();
   const contractPaymentRef = useRef<any>();
+  const contractDetailRef = useRef<any>();
 
   const {
     isLoading: isLoadingContractList,
@@ -87,6 +93,9 @@ const CustomerContract = () => {
     });
   };
 
+  const onOpenContractDetailDialog = (contractId: string) =>
+    contractDetailRef.current.openModal(contractId);
+
   if (isLoadingContractList) {
     return (
       <Flex justify="center" align="center" style={{ height: "70vh" }}>
@@ -99,15 +108,26 @@ const CustomerContract = () => {
     <Flex vertical gap="middle">
       <ContractRequirementDialog ref={contractRequirementRef} />
       <PaymentRequestDialog ref={contractPaymentRef} />
+      <ContractDetailDialog ref={contractDetailRef} />
+
       <Input.Search
         placeholder="Tìm kiếm hợp đồng"
         onChange={_.debounce(onSearchContract, 500)}
       />
       {contracts.map((contract: ContractItemTypes) => {
+        console.log(contract);
         return (
           <Card
             key={contract.id}
-            title={contract.title}
+            title={
+              <Flex align="center" justify="space-between">
+                <div>{contract.title}</div>
+                <Button
+                  icon={<EyeOutlined />}
+                  onClick={() => onOpenContractDetailDialog(contract.id)}
+                />
+              </Flex>
+            }
             style={{
               border: "1px solid #000",
               borderRadius: "1rem",
@@ -118,19 +138,35 @@ const CustomerContract = () => {
                 items={[
                   { label: "Mô tả", children: contract.description },
                   {
-                    label: "Ngày bắt đầu",
+                    label: "Ngày bắt đầu dự kiến",
                     children: dayjs(contract.startPlanDate).format(
                       DateTimeFormat.DATE_FORMAT
                     ),
                   },
                   {
-                    label: "Ngày kết thúc",
+                    label: "Ngày kết thúc dự kiến",
                     children: dayjs(contract.endPlanDate).format(
                       DateTimeFormat.DATE_FORMAT
                     ),
                   },
                   {
-                    label: "Tiền gửi",
+                    label: "Ngày bắt đầu",
+                    children: contract.actualStartDate
+                      ? dayjs(contract.actualStartDate).format(
+                          DateTimeFormat.DATE_FORMAT
+                        )
+                      : "-",
+                  },
+                  {
+                    label: "Ngày kết thúc",
+                    children: contract.actualEndDate
+                      ? dayjs(contract.actualEndDate).format(
+                          DateTimeFormat.DATE_FORMAT
+                        )
+                      : "-",
+                  },
+                  {
+                    label: "Phần trăm đặt cọc trước (%)",
                     children: contract.deposit,
                   },
                   {
@@ -141,7 +177,13 @@ const CustomerContract = () => {
                   },
                   {
                     label: "Trạng thái",
-                    children: <Tag color="geekblue">{contract.status}</Tag>,
+                    children: (
+                      <Tag color="geekblue">
+                        {convertStatusToVN(
+                          contract.status as ContractStatusEnum
+                        )}
+                      </Tag>
+                    ),
                   },
                   {
                     label: "Người lắp đặt",

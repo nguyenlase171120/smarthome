@@ -219,7 +219,7 @@ const CreateSurveyReportModal = (
               name="appointmentDate"
               rules={[{ required: true, message: "Yêu cầu chọn ngày hẹn" }]}
             >
-              <DatePicker />
+              <DatePicker placeholder="Ngày hẹn" />
             </Form.Item>
           </Col>
 

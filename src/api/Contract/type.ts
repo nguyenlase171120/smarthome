@@ -1,5 +1,9 @@
 import { ContractStatusEnum } from "../../enums";
-import { CustomerItemTypes, StaffItemTypes, TellerItemTypes } from "../../types";
+import {
+  CustomerItemTypes,
+  StaffItemTypes,
+  TellerItemTypes,
+} from "../../types";
 
 export type ContractListByCustomerId = {
   staffId?: string;
@@ -25,6 +29,33 @@ export type ContractItemTypes = {
   customer: CustomerItemTypes;
   staff: StaffItemTypes;
   teller: TellerItemTypes;
+  devicePackageUsages: DevicePackageUsages[];
+  contractDetails: ContractDetailTypes[];
+};
+
+export type DevicePackageUsages = {
+  devicePackageId: string;
+  name: string;
+  discountAmount: number;
+  price: number;
+  manufacturer: string;
+  image: string;
+  warrantyDuration: number;
+  startWarranty: string;
+  endWarranty: string;
+  createAt: string;
+};
+
+export type ContractDetailTypes = {
+  smartDeviceId: string;
+  name: string;
+  type: string;
+  price: number;
+  quantity: number;
+  installationPrice: number;
+  manufacturer: string;
+  image: string;
+  createAt: string;
 };
 
 export type UpdateContractTypes = {

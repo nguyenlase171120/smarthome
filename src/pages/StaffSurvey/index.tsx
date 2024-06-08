@@ -1,7 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import SurveyRequestAPI from "../../api/Survey";
-import { onHandleErrorAPIResponse } from "../../utils/helper";
+import {
+  convertSurveyStatusToVN,
+  onHandleErrorAPIResponse,
+} from "../../utils/helper";
 import { Button, Card, Flex, Input, Select, Skeleton, Spin, Tag } from "antd";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
@@ -21,7 +24,6 @@ const StaffSurvey = () => {
   const createSurveyReportRef = useRef<any>();
 
   const onOpenSurveyReport = (values: any) => {
-    console.log(values);
     setSurveyReportUpdate(values);
     createSurveyReportRef.current.openModal();
   };
@@ -42,6 +44,7 @@ const StaffSurvey = () => {
 
   useEffect(() => {
     getSurveyList({
+      pageSize: 999,
       staffId: userProfileState.id,
     });
   }, []);
@@ -105,7 +108,7 @@ const StaffSurvey = () => {
       />
       <Flex align="center" gap="middle">
         <Input.Search
-          placeholder="Tìm mô tả khảo sất"
+          placeholder="Tìm mô tả khảo sát"
           onChange={debounce(onSearchSurveyName, 500)}
         />
         <Select
@@ -113,23 +116,23 @@ const StaffSurvey = () => {
           onChange={(event) => onFilterSurveyStatus(event)}
           options={[
             {
-              label: "All",
+              label: convertSurveyStatusToVN(SurveyStatusEnum.ALL),
               value: "",
             },
             {
-              label: "Completed",
+              label: convertSurveyStatusToVN(SurveyStatusEnum.COMPLETED),
               value: SurveyStatusEnum.COMPLETED,
             },
             {
-              label: "Pending",
+              label: convertSurveyStatusToVN(SurveyStatusEnum.PENDING),
               value: SurveyStatusEnum.PENDING,
             },
             {
-              label: "Inprogress",
+              label: convertSurveyStatusToVN(SurveyStatusEnum.INPROGESS),
               value: SurveyStatusEnum.INPROGESS,
             },
             {
-              label: "Rejected",
+              label: convertSurveyStatusToVN(SurveyStatusEnum.REJECTED),
               value: SurveyStatusEnum.REJECTED,
             },
           ]}
@@ -152,7 +155,7 @@ const StaffSurvey = () => {
                   <Flex justify="space-between" gap="middle" align="flex-start">
                     <div className="survey-title">{item.description}</div>
                     <Tag color={onGetStatusColor(item.status)}>
-                      {item.status}
+                      {convertSurveyStatusToVN(item.status)}
                     </Tag>
                   </Flex>
 

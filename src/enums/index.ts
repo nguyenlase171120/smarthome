@@ -30,4 +30,5 @@ export enum ContractStatusEnum {
   WAIT_FOR_PAID = "WaitForPaid",
   COMPLETED = "Completed",
   CANCELLED = "Cancelled",
+  ALL = "",
 }
