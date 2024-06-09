@@ -139,12 +139,12 @@ const StaffContract = () => {
         message.success("Cập nhật trạng thái hợp đồng thành công");
 
         if (response.status === ContractStatusEnum.WAIT_FOR_PAID) {
-          // const formData = new FormData();
-          // formData.append("image", fileAcceptance as Blob);
-          // return mutateUploadAcceptanceImage({
-          //   formData,
-          //   id: contractId,
-          // });
+          const formData = new FormData();
+          formData.append("image", fileAcceptance as Blob);
+          return mutateUploadAcceptanceImage({
+            formData,
+            id: contractId,
+          });
         }
 
         mutateContracts({
@@ -211,16 +211,15 @@ const StaffContract = () => {
     e: ChangeEvent<HTMLInputElement>,
     contractId: string
   ) => {
-    console.log(contractId);
     setContractId(contractId);
     if (e.target.files && e.target.files.length > 0) {
-      // const selectedImage = e.target.files[0];
-      // const formData = new FormData();
-      // formData.append("image", selectedImage);
-      // mutateUploadContractImage({
-      //   formData,
-      //   id: contractId,
-      // });
+      const selectedImage = e.target.files[0];
+      const formData = new FormData();
+      formData.append("image", selectedImage);
+      mutateUploadContractImage({
+        formData,
+        id: contractId,
+      });
     }
   };
 
@@ -360,11 +359,9 @@ const StaffContract = () => {
                         contractItem.status as ContractStatusEnum
                       )}
                     >
-                      {/* {convertStatusToVN(
+                      {convertStatusToVN(
                         contractItem.status as ContractStatusEnum
-                      )} */}
-
-                      {contractItem.status}
+                      )}
                     </Tag>
                   </Flex>
 
@@ -410,6 +407,10 @@ const StaffContract = () => {
                       </label>
 
                       <input
+                        disabled={
+                          contractItem.status !==
+                          ContractStatusEnum.DEPOSIT_PAID
+                        }
                         style={{ display: "none" }}
                         id={`file-upload-${contractItem.id}`}
                         type="file"
@@ -421,7 +422,7 @@ const StaffContract = () => {
                     </Col>
                     <Col span={12}>
                       <label
-                        htmlFor="file-acceptance-upload"
+                        htmlFor={`file-acceptance-upload-${contractItem.id}`}
                         className="upload-btn"
                         style={{
                           opacity:
@@ -439,7 +440,7 @@ const StaffContract = () => {
                           contractItem.status !== ContractStatusEnum.IN_PROGRESS
                         }
                         style={{ display: "none" }}
-                        id="file-acceptance-upload"
+                        id={`file-acceptance-upload-${contractItem.id}`}
                         type="file"
                         accept="images/*"
                         onChange={(event) =>
