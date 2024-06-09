@@ -13,7 +13,7 @@ export type DevicePackageTypes = {
   completionTime: number;
   description: string;
   price: number;
-  status: string;
+  status: "InActive" | "Active";
   createAt: string;
   manufacturer: ManufactureItemTypes;
   promotion: PromotionItemTypes;

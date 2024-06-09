@@ -11,14 +11,12 @@ import {
 } from "../../api/Contract/type";
 import {
   Avatar,
-  Button,
   Card,
   Col,
   Flex,
   Input,
   Row,
   Select,
-  Skeleton,
   Spin,
   Tag,
   message,
@@ -42,7 +40,7 @@ const StaffContract = () => {
   const [contractId, setContractId] = useState<string>("");
   const [fileAcceptance, setFileAcceptance] = useState<File>();
 
-  const { isLoading: isLoadingUploadImage, mutate: mutateUploadContractImage } =
+  const { isPending: isLoadingUploadImage, mutate: mutateUploadContractImage } =
     useMutation({
       mutationFn: ContractAPI.uploadContractImage,
       mutationKey: ["contract-image"],
@@ -56,7 +54,7 @@ const StaffContract = () => {
     });
 
   const {
-    isLoading: isLoadingUploadAcceptance,
+    isPending: isLoadingUploadAcceptance,
     mutate: mutateUploadAcceptanceImage,
   } = useMutation({
     mutationFn: ContractAPI.uploadContractAcceptance,
@@ -75,7 +73,7 @@ const StaffContract = () => {
 
   const {
     mutate: getContractDetailMutate,
-    isLoading: isLoadingContractDetail,
+    isPending: isLoadingContractDetail,
   } = useMutation({
     onSuccess: (result) => {
       const response: ContractItemTypes = result;
@@ -113,7 +111,7 @@ const StaffContract = () => {
   });
 
   const {
-    isLoading: isLoadingContractList,
+    isPending: isLoadingContractList,
     data: contractsResponse,
     mutate: mutateContracts,
   } = useMutation({
@@ -130,7 +128,7 @@ const StaffContract = () => {
     },
   });
 
-  const { isLoading: isLoadingUpdateContract, mutate: updateContractStatus } =
+  const { isPending: isLoadingUpdateContract, mutate: updateContractStatus } =
     useMutation({
       mutationFn: ContractAPI.updateContract,
       mutationKey: [""],
@@ -141,12 +139,12 @@ const StaffContract = () => {
         message.success("Cập nhật trạng thái hợp đồng thành công");
 
         if (response.status === ContractStatusEnum.WAIT_FOR_PAID) {
-          const formData = new FormData();
-          formData.append("image", fileAcceptance as Blob);
-          return mutateUploadAcceptanceImage({
-            formData,
-            id: contractId,
-          });
+          // const formData = new FormData();
+          // formData.append("image", fileAcceptance as Blob);
+          // return mutateUploadAcceptanceImage({
+          //   formData,
+          //   id: contractId,
+          // });
         }
 
         mutateContracts({
@@ -213,16 +211,16 @@ const StaffContract = () => {
     e: ChangeEvent<HTMLInputElement>,
     contractId: string
   ) => {
+    console.log(contractId);
     setContractId(contractId);
     if (e.target.files && e.target.files.length > 0) {
-      const selectedImage = e.target.files[0];
-      const formData = new FormData();
-      formData.append("image", selectedImage);
-
-      mutateUploadContractImage({
-        formData,
-        id: contractId,
-      });
+      // const selectedImage = e.target.files[0];
+      // const formData = new FormData();
+      // formData.append("image", selectedImage);
+      // mutateUploadContractImage({
+      //   formData,
+      //   id: contractId,
+      // });
     }
   };
 
@@ -276,10 +274,10 @@ const StaffContract = () => {
 
       <Spin
         spinning={
-          isLoadingUploadImage ||
-          isLoadingUploadAcceptance ||
           isLoadingContractList ||
           isLoadingUpdateContract ||
+          isLoadingUploadImage ||
+          isLoadingUploadAcceptance ||
           isLoadingContractDetail
         }
       >
@@ -362,9 +360,11 @@ const StaffContract = () => {
                         contractItem.status as ContractStatusEnum
                       )}
                     >
-                      {convertStatusToVN(
+                      {/* {convertStatusToVN(
                         contractItem.status as ContractStatusEnum
-                      )}
+                      )} */}
+
+                      {contractItem.status}
                     </Tag>
                   </Flex>
 
@@ -395,7 +395,7 @@ const StaffContract = () => {
                   <Row gutter={[14, 14]}>
                     <Col span={12}>
                       <label
-                        htmlFor="file-upload"
+                        htmlFor={`file-upload-${contractItem.id}`}
                         className="upload-btn"
                         style={{
                           opacity:
@@ -408,13 +408,10 @@ const StaffContract = () => {
                         <UploadOutlined />
                         Hình hợp đồng
                       </label>
+
                       <input
-                        disabled={
-                          contractItem.status !==
-                          ContractStatusEnum.DEPOSIT_PAID
-                        }
                         style={{ display: "none" }}
-                        id="file-upload"
+                        id={`file-upload-${contractItem.id}`}
                         type="file"
                         accept="images/*"
                         onChange={(event) =>

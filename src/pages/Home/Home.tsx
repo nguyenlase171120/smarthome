@@ -53,7 +53,10 @@ const Home: React.FC = () => {
       />
 
       {packages.length > 0 && (
-        <PackageCard lstData={packages} key={devicePackages?.data} />
+        <PackageCard
+          lstData={packages.filter((item) => item.status === "Active")}
+          key={devicePackages?.data}
+        />
       )}
     </div>
   );

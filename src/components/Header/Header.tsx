@@ -1,5 +1,16 @@
-import { BellOutlined, CaretLeftFilled, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
-import { IonButton, IonButtons, IonHeader, IonTitle, IonToolbar } from "@ionic/react";
+import {
+  BellOutlined,
+  CaretLeftFilled,
+  ShoppingCartOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+import {
+  IonButton,
+  IonButtons,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import "./Header.css";
 import { useHistory } from "react-router";
@@ -13,7 +24,9 @@ const Header: React.FC = () => {
   const [titleBack, setTitleBack] = useState("");
   const [isShowBtnBack, setIsShowBtnBack] = useState(false);
   const [isShowEleCommon, setIsShowEleCommon] = useState(false);
-  const userProfileState = useSelector((selector: RootState) => selector.userProfile.profile);
+  const userProfileState = useSelector(
+    (selector: RootState) => selector.userProfile.profile
+  );
 
   useEffect(() => {
     const unListen = history.listen(async () => {
@@ -21,12 +34,16 @@ const Header: React.FC = () => {
       const { title } = (history.location.state as { title: string }) || {
         title: "",
       };
-      if (pathName.indexOf(END_POINTS.CUSTOMER_ROLE.PACKAGE) > -1) setIsShowBtnBack(true);
+      if (pathName.indexOf(END_POINTS.CUSTOMER_ROLE.PACKAGE) > -1)
+        setIsShowBtnBack(true);
       else setIsShowBtnBack(false);
 
       title && setTitleBack(title);
 
-      if (ROUTES_NON_FOOTER_HEADER.findIndex((x) => pathName.indexOf(x) > -1) > -1) setIsShowEleCommon(true);
+      if (
+        ROUTES_NON_FOOTER_HEADER.findIndex((x) => pathName.indexOf(x) > -1) > -1
+      )
+        setIsShowEleCommon(true);
       else setIsShowEleCommon(false);
     });
 
@@ -34,7 +51,9 @@ const Header: React.FC = () => {
   }, [history]);
 
   const onBackToHomePage = () => {
-    userProfileState.status.toLowerCase() === "staff" ? history.push(END_POINTS.STAFF_ROLE.SURVEY_REPORT) : history.push(END_POINTS.CUSTOMER_ROLE.HOME);
+    userProfileState.status.toLowerCase() === "staff"
+      ? history.push(END_POINTS.STAFF_ROLE.SURVEY_REPORT)
+      : history.push(END_POINTS.CUSTOMER_ROLE.HOME);
   };
 
   const items: MenuProps["items"] = [
@@ -58,12 +77,19 @@ const Header: React.FC = () => {
             {isShowBtnBack ? (
               <IonButtons slot="start">
                 <IonButton className="btn-back title-page">
-                  <CaretLeftFilled className="icon-back" />
+                  <CaretLeftFilled
+                    className="icon-back"
+                    onClick={onBackToHomePage}
+                  />
                   {titleBack}
                 </IonButton>
               </IonButtons>
             ) : (
-              <IonTitle slot="start" class="title-page container-main" onClick={onBackToHomePage}>
+              <IonTitle
+                slot="start"
+                class="title-page container-main"
+                onClick={onBackToHomePage}
+              >
                 Smart Home
               </IonTitle>
             )}

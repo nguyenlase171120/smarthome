@@ -47,7 +47,7 @@ const SurveyModal = ({}, ref: any) => {
   return (
     <Modal
       open={isOpenModal}
-      title="Yêu cẩu khảo sát"
+      title="Yêu cầu khảo sát"
       onCancel={onCloseModal}
       closeIcon
       footer
@@ -67,9 +67,13 @@ const SurveyModal = ({}, ref: any) => {
           <DatePicker
             style={{ width: "100%" }}
             placeholder="Ngày muốn khảo sát"
+            disabledDate={(current) => {
+              let customDate = dayjs().format("YYYY-MM-DD");
+              return current && current < dayjs(customDate, "YYYY-MM-DD");
+            }}
           />
         </Form.Item>
-        <Form.Item name="description">
+        <Form.Item name="description" label="Ghi chú">
           <Input.TextArea rows={3} placeholder="Mô tả" />
         </Form.Item>
 

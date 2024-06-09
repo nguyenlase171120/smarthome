@@ -183,11 +183,12 @@ const CreateSurveyReportModal = (
       <Form layout="vertical" form={form} onFinish={onSubmitSurveyReportForm}>
         <Row gutter={[14, 14]}>
           <Col span={24}>
-            <Form.Item label="Yêu cẩu khảo sát" name="surveyRequestId">
+            <Form.Item label="Yêu cầu khảo sát" name="surveyRequestId">
               {surveyRequestSelect.length > 0 && (
                 <Select
                   options={surveyRequestSelect}
                   defaultValue={SurveyReportUpdate?.id}
+                  disabled
                 />
               )}
             </Form.Item>
@@ -195,7 +196,7 @@ const CreateSurveyReportModal = (
 
           <Col span={24}>
             <Form.Item
-              label="Gói thiết bị"
+              label="Gói thiết bị đề xuất"
               name="recommendDevicePackageId"
               rules={[{ required: true, message: "Yêu cầu nhập thông tin" }]}
             >
@@ -205,7 +206,7 @@ const CreateSurveyReportModal = (
 
           <Col span={12}>
             <Form.Item
-              label="Khu vực phòng"
+              label="Diện tích phòng (m2)"
               name="roomArea"
               rules={[{ required: true, message: "Nhập khu vưc phòng" }]}
             >
@@ -215,16 +216,22 @@ const CreateSurveyReportModal = (
 
           <Col span={12}>
             <Form.Item
-              label="Ngày hẹn"
+              label="Ngày kí hợp đồng"
               name="appointmentDate"
               rules={[{ required: true, message: "Yêu cầu chọn ngày hẹn" }]}
             >
-              <DatePicker placeholder="Ngày hẹn" />
+              <DatePicker
+                placeholder="Ngày hẹn"
+                disabledDate={(current) => {
+                  let customDate = dayjs().format("YYYY-MM-DD");
+                  return current && current < dayjs(customDate, "YYYY-MM-DD");
+                }}
+              />
             </Form.Item>
           </Col>
 
           <Col span={24}>
-            <Form.Item label="Mô tả" name="description">
+            <Form.Item label="Ghi chú" name="description">
               <Input.TextArea rows={3} />
             </Form.Item>
           </Col>
